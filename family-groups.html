@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>קבוצות משפחה - Home Budget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --text: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .logo {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .page-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header h1 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #6b7280;
+        }
+
+        .add-group-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .group-card {
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .group-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .group-name {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .group-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .group-body {
+            padding: 1.5rem;
+        }
+
+        .members-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 1rem;
+        }
+
+        .member-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-info p {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .member-role {
+            margin-right: auto;
+            background: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .budget-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .budget-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .budget-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .budget-item:last-child {
+            border-bottom: none;
+        }
+
+        .budget-label {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .budget-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .group-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            min-height: 44px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-header {
+                padding: 1rem;
+            }
+
+            .group-body {
+                padding: 1rem;
+            }
+
+            .member-item {
+                padding: 0.75rem;
+            }
+
+            .group-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="back-btn" onclick="history.back()">←</button>
+        <div class="logo">💰 Home Budget</div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>👥 קבוצות משפחה</h1>
+            <p>נהל תקציבים משותפים עם בני משפחתך</p>
+            <button class="add-group-btn" onclick="alert('יצירת קבוצה חדשה')">➕ צור קבוצה חדשה</button>
+        </div>
+
+        <!-- Group 1 -->
+        <div class="group-card">
+            <div class="group-header">
+                <div class="group-name">משפחת כהן</div>
+                <div class="group-info">4 חברים • תקציב חודשי: ₪50,000</div>
+            </div>
+            <div class="group-body">
+                <div class="members-section">
+                    <h3>👨‍👩‍👧‍👦 חברים</h3>
+
+                    <div class="member-item">
+                        <div class="member-avatar">ד</div>
+                        <div class="member-info">
+                            <h4>דוד כהן</h4>
+                            <p>בעלים</p>
+                        </div>
+                        <div class="member-role">מנהל</div>
+                    </div>
+
+                    <div class="member-item">
+                        <div class="member-avatar">ר</div>
+                        <div class="member-info">
+                            <h4>רחל כהן</h4>
+                            <p>הצטרפה לפני חודש</p>
+                        </div>
+                        <div class="member-role">חברה</div>
+                    </div>
+
+                    <div class="member-item">
+                        <div class="member-avatar">ש</div>
+                        <div class="member-info">
+                            <h4>שוקי כהן</h4>
+                            <p>בן</p>
+                        </div>
+                        <div class="member-role">חברה</div>
+                    </div>
+
+                    <div class="member-item">
+                        <div class="member-avatar">נ</div>
+                        <div class="member-info">
+                            <h4>נועה כהן</h4>
+                            <p>בת</p>
+                        </div>
+                        <div class="member-role">חברה</div>
+                    </div>
+                </div>
+
+                <div class="budget-section">
+                    <h3>💰 תקציב</h3>
+                    <div class="budget-item">
+                        <span class="budget-label">הוצאות החודש</span>
+                        <span class="budget-amount" style="color: #ef4444;">₪12,500</span>
+                    </div>
+                    <div class="budget-item">
+                        <span class="budget-label">תקציב חודשי</span>
+                        <span class="budget-amount">₪50,000</span>
+                    </div>
+                    <div class="budget-item">
+                        <span class="budget-label">יתרה זמינה</span>
+                        <span class="budget-amount" style="color: #10b981;">₪37,500</span>
+                    </div>
+                </div>
+
+                <div class="group-actions">
+                    <button class="action-btn" onclick="alert('עריכת קבוצה')">✏️ ערוך</button>
+                    <button class="action-btn" onclick="alert('הצגת דוחות')">📊 דוחות</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group 2 -->
+        <div class="group-card">
+            <div class="group-header">
+                <div class="group-name">עוזרים בחודש</div>
+                <div class="group-info">2 חברים • תקציב חודשי: ₪5,000</div>
+            </div>
+            <div class="group-body">
+                <div class="members-section">
+                    <h3>👨‍👩‍👧‍👦 חברים</h3>
+
+                    <div class="member-item">
+                        <div class="member-avatar">ד</div>
+                        <div class="member-info">
+                            <h4>דוד כהן</h4>
+                            <p>בעלים</p>
+                        </div>
+                        <div class="member-role">מנהל</div>
+                    </div>
+
+                    <div class="member-item">
+                        <div class="member-avatar">ש</div>
+                        <div class="member-info">
+                            <h4>שוקי כהן</h4>
+                            <p>חברה</p>
+                        </div>
+                        <div class="member-role">חברה</div>
+                    </div>
+                </div>
+
+                <div class="budget-section">
+                    <h3>💰 תקציב</h3>
+                    <div class="budget-item">
+                        <span class="budget-label">הוצאות החודש</span>
+                        <span class="budget-amount" style="color: #ef4444;">₪3,200</span>
+                    </div>
+                    <div class="budget-item">
+                        <span class="budget-label">תקציב חודשי</span>
+                        <span class="budget-amount">₪5,000</span>
+                    </div>
+                    <div class="budget-item">
+                        <span class="budget-label">יתרה זמינה</span>
+                        <span class="budget-amount" style="color: #10b981;">₪1,800</span>
+                    </div>
+                </div>
+
+                <div class="group-actions">
+                    <button class="action-btn" onclick="alert('עריכת קבוצה')">✏️ ערוך</button>
+                    <button class="action-btn" onclick="alert('הצגת דוחות')">📊 דוחות</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

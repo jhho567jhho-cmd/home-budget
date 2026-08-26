@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>צור קשר - Home Budget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --text: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .logo {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .intro-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .intro-card h1 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin-bottom: 0.75rem;
+        }
+
+        .intro-card p {
+            color: #6b7280;
+            font-size: clamp(0.95rem, 2.5vw, 1rem);
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-method {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .contact-method:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .contact-method-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-method h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-method p {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-card h2 {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: clamp(0.95rem, 2.5vw, 1rem);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="phone"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="phone"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: clamp(1rem, 3vw, 1.1rem);
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .faq-section {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .faq-section h2 {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .intro-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .form-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .contact-methods {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .contact-method {
+                padding: 1rem;
+            }
+
+            .contact-method-icon {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="back-btn" onclick="history.back()">←</button>
+        <div class="logo">💰 Home Budget</div>
+    </header>
+
+    <div class="container">
+        <div class="intro-card">
+            <h1>📞 צור קשר איתנו</h1>
+            <p>יש לך שאלה או בעיה? אנחנו כאן כדי לעזור!</p>
+        </div>
+
+        <div class="contact-methods">
+            <div class="contact-method" onclick="alert('📧 Email: support@homebudget.co.il')">
+                <div class="contact-method-icon">📧</div>
+                <h3>אימייל</h3>
+                <p>תשובה ב-24 שעות</p>
+            </div>
+            <div class="contact-method" onclick="alert('📱 WhatsApp: 052-1234567')">
+                <div class="contact-method-icon">💬</div>
+                <h3>WhatsApp</h3>
+                <p>עזרה מיידית</p>
+            </div>
+            <div class="contact-method" onclick="alert('☎️ Phone: 03-1234567')">
+                <div class="contact-method-icon">☎️</div>
+                <h3>טלפון</h3>
+                <p>ימי ראשון-חמישי 9-18</p>
+            </div>
+            <div class="contact-method" onclick="alert('💬 Live Chat זמין בחיסכון בעמוד הבית')">
+                <div class="contact-method-icon">💬</div>
+                <h3>צ'אט חי</h3>
+                <p>תמיד זמין</p>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h2>שלח לנו הודעה</h2>
+            <form onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="name">שם מלא</label>
+                    <input type="text" id="name" placeholder="הזן שם מלא" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">אימייל</label>
+                    <input type="email" id="email" placeholder="example@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">מספר טלפון</label>
+                    <input type="text" id="phone" placeholder="05X-XXXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">נושא</label>
+                    <select id="subject" required>
+                        <option value="">בחר נושא</option>
+                        <option value="support">תמיכה טכנית</option>
+                        <option value="billing">בעיות תשלום</option>
+                        <option value="feature">בקשה לתכונה חדשה</option>
+                        <option value="feedback">משוב</option>
+                        <option value="other">אחר</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">הודעה</label>
+                    <textarea id="message" placeholder="כתוב את הודעתך כאן..." required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">ביטול</button>
+                    <button type="submit" class="btn btn-primary">שלח הודעה</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="faq-section">
+            <h2>❓ שאלות נפוצות</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">איך אני יכול להוסיף בני משפחה לחשבוני?</div>
+                <div class="faq-answer">
+                    עבור לעמוד "קבוצות משפחה", בחר קבוצה וגלול למטה. תוכל להוסיף בני משפחה באמצעות הקישור השתתפות או ממשלח הודעה ישירה.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">האם הנתונים שלי בטוחים?</div>
+                <div class="faq-answer">
+                    כן! כל הנתונים שלך מוצפנים בסטנדרט 256-bit AES ומאובטחים בשרתים מאובטחים בעולם. אנחנו לא שומרים סיסמאות בטקסט רגיל.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">מה הוא עלות השימוש?</div>
+                <div class="faq-answer">
+                    Home Budget עומד בחינם לבחורים! יש גם תוכניות פרימיום עם תכונות מתקדמות לחשבונות משפחתיים.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">איך משנים סיסמה?</div>
+                <div class="faq-answer">
+                    עבור להגדרות החשבון שלך, בחר "אבטחה" ואז "שנה סיסמה". הזן את הסיסמה הישנה והחדשה שלך.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            alert('הודעתך נשלחה בהצלחה! ✅\nנחזור אליך בהקדם!');
+            // Reset form
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

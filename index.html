@@ -62,6 +62,7 @@
             display: flex;
             gap: 2rem;
             list-style: none;
+            flex-wrap: wrap;
         }
 
         .nav-links a {
@@ -74,6 +75,20 @@
 
         .nav-links a:hover {
             color: var(--primary);
+        }
+
+        .cta-nav {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .cta-nav:hover {
+            background-color: var(--secondary);
+            color: white;
         }
 
         /* Hero Section */
@@ -403,11 +418,12 @@
     <!-- Header -->
     <header>
         <nav>
-            <a href="#" class="logo">💰 Home Budget</a>
+            <a href="index.html" class="logo">💰 Home Budget</a>
             <ul class="nav-links">
                 <li><a href="#features">תכונות</a></li>
-                <li><a href="#stats">סטטיסטיקות</a></li>
-                <li><a href="#contact">צור קשר</a></li>
+                <li><a href="pricing.html">תמחור</a></li>
+                <li><a href="contact.html">צור קשר</a></li>
+                <li><a href="login.html" class="cta-nav">התחברות</a></li>
             </ul>
         </nav>
     </header>
@@ -418,8 +434,8 @@
             <h1>ניהול תקציב חכם לכל המשפחה</h1>
             <p>עזור לכל אברי המשפחה לנהל את התקציב בקלות, לחסוך כסף ולהגיע ליעדים הפיננסיים שלהם</p>
             <div class="hero-buttons">
-                <button class="btn btn-primary">התחל חינם</button>
-                <button class="btn btn-secondary">למד עוד</button>
+                <a href="login.html" class="btn btn-primary">התחל חינם</a>
+                <a href="#features" class="btn btn-secondary">למד עוד</a>
             </div>
         </div>
     </section>
@@ -499,7 +515,7 @@
         <div class="cta-content">
             <h2>התחל את יומן הכספים החכם שלך היום</h2>
             <p>הצטרף לאלפים של משפחות שכבר משתמשות ב-Home Budget לניהול תקציבן בנבונות</p>
-            <button class="btn btn-primary">צור חשבון חינם</button>
+            <a href="login.html" class="btn btn-primary">צור חשבון חינם</a>
         </div>
     </section>
 

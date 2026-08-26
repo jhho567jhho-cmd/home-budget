@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>תמחור - Home Budget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --text: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .logo {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-header h1 {
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .pricing-header p {
+            color: #6b7280;
+            font-size: clamp(1rem, 3vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid transparent;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2);
+            transform: scale(1.05);
+        }
+
+        .pricing-header-content {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .pricing-card.featured .pricing-header-content {
+            background: linear-gradient(135deg, var(--accent) 0%, #f97316 100%);
+        }
+
+        .plan-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .plan-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .pricing-body {
+            padding: 2rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .price-amount {
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .pricing-card.featured .price-amount {
+            color: var(--accent);
+        }
+
+        .price-period {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            flex: 1;
+        }
+
+        .features-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .pricing-button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: clamp(1rem, 3vw, 1rem);
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 48px;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-button-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .pricing-button-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .pricing-card.featured .pricing-button-primary {
+            background-color: var(--accent);
+        }
+
+        .pricing-card.featured .pricing-button-primary:hover {
+            background-color: #f97316;
+        }
+
+        .pricing-button-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .pricing-button-secondary:hover {
+            background-color: #f0f9ff;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .comparison-section {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-top: 3rem;
+        }
+
+        .comparison-section h2 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background-color: var(--light);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .feature-name {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .comparison-section {
+                padding: 1.5rem 1rem;
+                overflow-x: auto;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="back-btn" onclick="history.back()">←</button>
+        <div class="logo">💰 Home Budget</div>
+    </header>
+
+    <div class="container">
+        <div class="pricing-header">
+            <h1>💎 בחר את התוכנית שלך</h1>
+            <p>בחר את התוכנית המתאימה ביותר לצרכים שלך ותוך שניה תוכל להתחיל</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="pricing-header-content">
+                    <div class="plan-name">חינם</div>
+                    <div class="plan-description">התחל עם סיסמה</div>
+                </div>
+                <div class="pricing-body">
+                    <div class="price">
+                        <div class="price-amount">₪0</div>
+                        <div class="price-period">תמיד חינם</div>
+                    </div>
+
+                    <ul class="features-list">
+                        <li>ניהול הוצאות בסיסי</li>
+                        <li>עד 3 משתמשים</li>
+                        <li>דוחות חודשיים</li>
+                        <li>1 קבוצה משפחתית</li>
+                        <li>תמיכה בדוא"ל</li>
+                    </ul>
+
+                    <button class="pricing-button pricing-button-secondary">בחר תוכנית</button>
+                </div>
+            </div>
+
+            <!-- Pro Plan (Featured) -->
+            <div class="pricing-card featured">
+                <div class="pricing-header-content">
+                    <div class="badge">הפופולרית ביותר!</div>
+                    <div class="plan-name">פרו</div>
+                    <div class="plan-description">לחשבונות משפחתיים</div>
+                </div>
+                <div class="pricing-body">
+                    <div class="price">
+                        <div class="price-amount">₪29</div>
+                        <div class="price-period">לחודש</div>
+                    </div>
+
+                    <ul class="features-list">
+                        <li>ניהול הוצאות מתקדם</li>
+                        <li>עד 10 משתמשים</li>
+                        <li>דוחות שבועיים וחודשיים</li>
+                        <li>עד 5 קבוצות משפחתיות</li>
+                        <li>התראות בזמן אמת</li>
+                        <li>ייבוא CSV</li>
+                        <li>תמיכה בטלפון וצ'אט</li>
+                    </ul>
+
+                    <button class="pricing-button pricing-button-primary">בחר תוכנית</button>
+                </div>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="pricing-card">
+                <div class="pricing-header-content">
+                    <div class="plan-name">פרימיום</div>
+                    <div class="plan-description">לעסקים וקבוצות גדולות</div>
+                </div>
+                <div class="pricing-body">
+                    <div class="price">
+                        <div class="price-amount">₪79</div>
+                        <div class="price-period">לחודש</div>
+                    </div>
+
+                    <ul class="features-list">
+                        <li>כל מה שב-Pro +</li>
+                        <li>משתמשים בלתי מוגבלים</li>
+                        <li>דוחות יומיים</li>
+                        <li>ניתוח חכם בAI</li>
+                        <li>תכנון תקציב מתקדם</li>
+                        <li>ייבוא/ייצוא מנהלים</li>
+                        <li>תמיכה VIP 24/7</li>
+                        <li>אפליקציה ראשונה</li>
+                    </ul>
+
+                    <button class="pricing-button pricing-button-primary">בחר תוכנית</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h2>📊 השוואת תוכניות</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>תכונה</th>
+                        <th>חינם</th>
+                        <th>פרו</th>
+                        <th>פרימיום</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="feature-name">ניהול הוצאות</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">משתמשים</td>
+                        <td>3</td>
+                        <td>10</td>
+                        <td>בלתי מוגבל</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">קבוצות משפחתיות</td>
+                        <td>1</td>
+                        <td>5</td>
+                        <td>בלתי מוגבל</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">דוחות</td>
+                        <td>חודשי</td>
+                        <td>שבועי + חודשי</td>
+                        <td>יומי + שבועי + חודשי</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">התראות בזמן אמת</td>
+                        <td>✗</td>
+                        <td>✓</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">ניתוח AI</td>
+                        <td>✗</td>
+                        <td>✗</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">תמיכה טכנית</td>
+                        <td>דוא"ל</td>
+                        <td>דוא"ל + צ'אט + טלפון</td>
+                        <td>VIP 24/7</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">עלות חודשית</td>
+                        <td>₪0</td>
+                        <td>₪29</td>
+                        <td>₪79</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

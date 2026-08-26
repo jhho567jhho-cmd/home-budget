@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>דוחות - Home Budget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --text: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .logo {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+        }
+
+        .date-filter {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-right: 4px solid var(--primary);
+        }
+
+        .stat-box.income {
+            border-right-color: var(--success);
+        }
+
+        .stat-box.expense {
+            border-right-color: var(--danger);
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 700;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .pie-chart {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #fef3c7 100%);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .bar-chart {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, #e0e7ff, #fef3c7);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 1rem;
+            gap: 0.5rem;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--primary), var(--accent));
+            border-radius: 0.25rem;
+            min-height: 30px;
+        }
+
+        .category-breakdown {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-info {
+            flex: 1;
+        }
+
+        .category-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-percent {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--light);
+            border-radius: 0.25rem;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .category-amount {
+            font-weight: 700;
+            margin-right: 1rem;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .export-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .export-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .date-filter {
+                width: 100%;
+            }
+
+            .filter-btn {
+                flex: 1;
+                min-width: 70px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .category-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .category-amount {
+                align-self: flex-end;
+                margin-top: 0.5rem;
+            }
+
+            .export-buttons {
+                flex-direction: column;
+            }
+
+            .export-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="back-btn" onclick="history.back()">←</button>
+        <div class="logo">💰 Home Budget</div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>📊 דוחות ניתוחים</h1>
+            <div class="date-filter">
+                <button class="filter-btn active">החודש</button>
+                <button class="filter-btn">השנה</button>
+                <button class="filter-btn">3 חודשים</button>
+                <button class="filter-btn">כל הזמן</button>
+            </div>
+        </div>
+
+        <div class="stats-overview">
+            <div class="stat-box income">
+                <div class="stat-label">סך הכנסות</div>
+                <div class="stat-value">₪45,000</div>
+            </div>
+            <div class="stat-box expense">
+                <div class="stat-label">סך הוצאות</div>
+                <div class="stat-value">₪12,500</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">חסכון</div>
+                <div class="stat-value">₪32,500</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">יחס חסכון</div>
+                <div class="stat-value">72%</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">📊 התפלגות הוצאות</div>
+                <div class="pie-chart">
+                    גרף עוגה - 📈
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">📈 הוצאות חודשיות</div>
+                <div class="bar-chart">
+                    <div class="bar" style="height: 40%;"></div>
+                    <div class="bar" style="height: 55%;"></div>
+                    <div class="bar" style="height: 35%;"></div>
+                    <div class="bar" style="height: 65%;"></div>
+                    <div class="bar" style="height: 45%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-breakdown">
+            <div class="category-title">📋 פירוט לפי קטגוריה</div>
+
+            <div class="category-item">
+                <div class="category-info">
+                    <div class="category-name">🏠 דיור (שכירות)</div>
+                    <div class="category-percent">44% מהתקציב</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 44%;"></div>
+                    </div>
+                </div>
+                <div class="category-amount">₪5,500</div>
+            </div>
+
+            <div class="category-item">
+                <div class="category-info">
+                    <div class="category-name">🛒 קניות ואוכל</div>
+                    <div class="category-percent">28% מהתקציב</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 28%;"></div>
+                    </div>
+                </div>
+                <div class="category-amount">₪3,500</div>
+            </div>
+
+            <div class="category-item">
+                <div class="category-info">
+                    <div class="category-name">💡 תשלומים וחשמל</div>
+                    <div class="category-percent">16% מהתקציב</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 16%;"></div>
+                    </div>
+                </div>
+                <div class="category-amount">₪2,000</div>
+            </div>
+
+            <div class="category-item">
+                <div class="category-info">
+                    <div class="category-name">🚗 תחבורה</div>
+                    <div class="category-percent">12% מהתקציב</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 12%;"></div>
+                    </div>
+                </div>
+                <div class="category-amount">₪1,500</div>
+            </div>
+        </div>
+
+        <div class="export-section">
+            <div class="export-title">📥 ייצוא דוח</div>
+            <div class="export-buttons">
+                <button class="export-btn">📄 PDF</button>
+                <button class="export-btn">📊 Excel</button>
+                <button class="export-btn">📧 שלח בדוא"ל</button>
+                <button class="export-btn">🖨️ הדפס</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

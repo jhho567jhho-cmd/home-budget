@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>הגדרות - Home Budget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --text: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .logo {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            color: var(--text);
+        }
+
+        .settings-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            padding: 1rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            white-space: nowrap;
+            margin-bottom: -2px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            color: var(--primary);
+        }
+
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            flex: 1;
+        }
+
+        .setting-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .setting-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+            background: var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--success);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            right: 2px;
+            transition: right 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            right: auto;
+            left: 2px;
+        }
+
+        .select-input {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 0.95rem;
+        }
+
+        .input-field {
+            width: 150px;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 0.95rem;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-email {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+
+        .btn-danger {
+            background: white;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #fef2f2;
+        }
+
+        .danger-zone {
+            border: 2px solid var(--danger);
+            background: #fef2f2;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .settings-tabs {
+                gap: 0.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .tab-button {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .settings-card {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .setting-item {
+                padding: 0.75rem 0;
+            }
+
+            .input-field {
+                width: 100px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="back-btn" onclick="history.back()">←</button>
+        <div class="logo">💰 Home Budget</div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>⚙️ הגדרות</h1>
+        </div>
+
+        <div class="settings-tabs">
+            <button class="tab-button active" onclick="switchTab('account')">👤 חשבון</button>
+            <button class="tab-button" onclick="switchTab('preferences')">🎨 העדפות</button>
+            <button class="tab-button" onclick="switchTab('security')">🔒 אבטחה</button>
+            <button class="tab-button" onclick="switchTab('notifications')">🔔 התראות</button>
+        </div>
+
+        <!-- Account Tab -->
+        <div id="account" class="tab-content active">
+            <div class="settings-card">
+                <div class="profile-section">
+                    <div class="profile-avatar">ד</div>
+                    <div class="profile-name">דוד כהן</div>
+                    <div class="profile-email">david.cohen@example.com</div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">שם מלא</div>
+                    </div>
+                    <input type="text" class="input-field" value="דוד כהן">
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">אימייל</div>
+                    </div>
+                    <input type="email" class="input-field" value="david@example.com">
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">טלפון</div>
+                    </div>
+                    <input type="tel" class="input-field" value="050-1234567">
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary">💾 שמור שינויים</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Tab -->
+        <div id="preferences" class="tab-content">
+            <div class="settings-card">
+                <div class="settings-title">💱 מטבע ושפה</div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">מטבע</div>
+                        <div class="setting-description">בחר את המטבע הברירת מחדל</div>
+                    </div>
+                    <select class="select-input">
+                        <option>₪ שקל</option>
+                        <option>$ דולר</option>
+                        <option>€ יורו</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">שפה</div>
+                        <div class="setting-description">שנה את שפת ההצגה</div>
+                    </div>
+                    <select class="select-input">
+                        <option>עברית</option>
+                        <option>אנגלית</option>
+                        <option>ערבית</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-title">🎨 מראה וחיוך</div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">ערכת צבעים</div>
+                        <div class="setting-description">בחר בין בהיר או כהה</div>
+                    </div>
+                    <select class="select-input">
+                        <option>אוטומטי</option>
+                        <option>בהיר</option>
+                        <option>כהה</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">ריווח מיוחד</div>
+                        <div class="setting-description">עדכון טקסט ו-UI לנגישות</div>
+                    </div>
+                    <button class="toggle-switch" onclick="toggleSwitch(this)"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Tab -->
+        <div id="security" class="tab-content">
+            <div class="settings-card">
+                <div class="settings-title">🔐 אבטחה ההסword</div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">סיסמה נוכחית</div>
+                        <div class="setting-description">עדכן את סיסמתך</div>
+                    </div>
+                    <button class="btn btn-primary" style="flex: 0 1 auto; width: auto; padding: 0.5rem 1rem;">שנה</button>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-title">🔑 אימות דו-שלבי</div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">אימות דו-שלבי</div>
+                        <div class="setting-description">הוסף שכבת אבטחה נוספת</div>
+                    </div>
+                    <button class="toggle-switch" onclick="toggleSwitch(this)"></button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">הודעות התחברות חדשות</div>
+                        <div class="setting-description">קבל התראה כשמישהו מתחבר</div>
+                    </div>
+                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-title">📱 התקנים מחוברים</div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">Safari בiPhone (פעיל)</div>
+                        <div class="setting-description">התחברות אחרונה: היום בשעה 14:30</div>
+                    </div>
+                    <button class="btn btn-danger" style="flex: 0 1 auto; width: auto; padding: 0.5rem 1rem;">הוציא</button>
+                </div>
+            </div>
+
+            <div class="settings-card danger-zone">
+                <div class="settings-title" style="color: var(--danger);">⚠️ אזור סכנה</div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">מחק חשבון</div>
+                        <div class="setting-description">הסרה קבועה של חשבונך וכל הנתונים</div>
+                    </div>
+                    <button class="btn btn-danger" style="flex: 0 1 auto; width: auto; padding: 0.5rem 1rem;">מחק</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div id="notifications" class="tab-content">
+            <div class="settings-card">
+                <div class="settings-title">📧 הודעות דוא"ל</div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">תקציב עדכוני</div>
+                        <div class="setting-description">קבל דוא"ל כשהוצאות חוצות גבול</div>
+                    </div>
+                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">דוחות שבועיים</div>
+                        <div class="setting-description">קבל דוח על ההוצאות השבועיות</div>
+                    </div>
+                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">עדכונים של מערכת</div>
+                        <div class="setting-description">קבל עדכונים חשובים על השירות</div>
+                    </div>
+                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <div class="settings-title">📱 הודעות בתוך האפליקציה</div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">התראות תקציב</div>
+                        <div class="setting-description">קבל התראות בתוך האפליקציה</div>
+                    </div>
+                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="setting-name">הודעות קבוצה</div>
+                        <div class="setting-description">קבל הודעות מחברי קבוצה</div>
+                    </div>
+                    <button class="toggle-switch active" onclick="toggleSwitch(this)"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function toggleSwitch(btn) {
+            btn.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

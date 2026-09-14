@@ -376,7 +376,7 @@ const DC=[
 
 let cats=[],txs=[],bud={},xm=new Set(),eb=null,tab='dashboard',ft='expense',fc=null,pd=null;
 let dbRef=null,synced=false,dbReady=false,rT=null,userName='';
-let writeQ=[];
+let writeQ=[],failQ=[];
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 
@@ -384,8 +384,10 @@ function ldLocal(){
   try{cats=JSON.parse(localStorage.getItem('hb_cats'))||DC}catch{cats=DC}
   try{txs=JSON.parse(localStorage.getItem('hb_txs'))||[];txs.forEach(t=>{if(typeof t.id==='number')t.id=String(t.id)})}catch{txs=[]}
   try{bud=JSON.parse(localStorage.getItem('hb_budgets'))||{}}catch{bud={}}
+  try{failQ=JSON.parse(localStorage.getItem('hb_failq'))||[]}catch{failQ=[]}
 }
 function svLocal(){try{localStorage.setItem('hb_cats',JSON.stringify(cats));localStorage.setItem('hb_txs',JSON.stringify(txs));localStorage.setItem('hb_budgets',JSON.stringify(bud))}catch{}}
+function svFailQ(){try{localStorage.setItem('hb_failq',JSON.stringify(failQ))}catch{}}
 
 function uSI(){const el=document.getElementById('sync-s');if(el){el.className=synced?'sync on':'sync';el.querySelector('span').textContent=synced?'מסונכרן':'מקומי'}}
 function qRender(){if(rT)return;rT=requestAnimationFrame(()=>{rT=null;render()})}
@@ -393,24 +395,34 @@ function qRender(){if(rT)return;rT=requestAnimationFrame(()=>{rT=null;render()})
 function sErr(m){
   let el=document.getElementById('serr');
   if(!el){el=document.createElement('div');el.id='serr';
-    el.style.cssText='position:fixed;top:0;left:0;right:0;padding:10px 16px;background:#EF4444;color:#fff;font-size:13px;font-weight:700;text-align:center;z-index:999;font-family:Heebo,sans-serif;direction:rtl;cursor:pointer;transition:opacity .3s';
+    el.style.cssText='position:fixed;top:0;left:0;right:0;padding:10px 16px;background:#F59E0B;color:#000;font-size:13px;font-weight:700;text-align:center;z-index:999;font-family:Heebo,sans-serif;direction:rtl;cursor:pointer;transition:opacity .3s';
     el.onclick=()=>{el.style.opacity='0';setTimeout(()=>el.remove(),300)};
     document.body.appendChild(el)}
   el.textContent=m;el.style.opacity='1';
-  setTimeout(()=>{if(el.parentNode){el.style.opacity='0';setTimeout(()=>{if(el.parentNode)el.remove()},300)}},6000);
+  setTimeout(()=>{if(el.parentNode){el.style.opacity='0';setTimeout(()=>{if(el.parentNode)el.remove()},300)}},5000);
 }
 
 async function dbWrite(fn,retries){
   retries=retries||0;
   try{await fn()}catch(e){
-    if(retries<2&&(e.code==='unavailable'||e.code==='resource_exhausted')){
-      await new Promise(r=>setTimeout(r,(retries+1)*1500));
+    if(retries<4&&e.code!=='quota_exceeded'){
+      await new Promise(r=>setTimeout(r,Math.min((retries+1)*2000,8000)));
       return dbWrite(fn,retries+1);
     }
-    sErr('שגיאת סנכרון: '+e.message);
-    synced=false;uSI();
     throw e;
   }
+}
+
+async function retryFailed(){
+  if(!dbReady||!failQ.length)return;
+  const items=[...failQ];failQ=[];svFailQ();
+  for(const w of items){
+    try{
+      if(w.op==='set')await dbWrite(()=>dbRef.doc(w.path).set(w.data));
+      else if(w.op==='del')await dbWrite(()=>dbRef.doc(w.path).delete());
+    }catch(e){failQ.push(w);svFailQ()}
+  }
+  if(!failQ.length&&items.length){synced=true;uSI()}
 }
 
 function ldUser(){try{userName=localStorage.getItem('hb_user')||''}catch{}}
@@ -447,31 +459,45 @@ async function initDB(){
   synced=true;dbReady=true;uSI();
   const q=writeQ;writeQ=[];
   for(const fn of q){try{await fn()}catch(e){}}
+  retryFailed();
   db.doc("config/cats").onSnapshot(s=>{if(s.exists){cats=s.data().items||DC;svLocal();qRender()}},e=>{synced=false;uSI()});
   db.doc("config/bud").onSnapshot(s=>{bud=s.exists?(s.data().items||{}):{};svLocal();qRender()},e=>{synced=false;uSI()});
   db.collection("txs").onSnapshot(s=>{txs=s.docs.filter(d=>d.exists).map(d=>({id:d.id,...d.data()}));svLocal();qRender()},e=>{synced=false;uSI()});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&dbRef){synced=true;uSI()}});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&dbRef){synced=true;uSI();retryFailed()}});
+  setInterval(()=>{if(dbReady)retryFailed()},30000);
 }
 
 async function pC(){
   svLocal();
   if(!dbReady){writeQ.push(()=>pC());return}
-  try{await dbWrite(()=>dbRef.doc("config/cats").set({items:cats}))}catch(e){}
+  try{await dbWrite(()=>dbRef.doc("config/cats").set({items:cats}))}catch(e){
+    failQ.push({op:'set',path:'config/cats',data:{items:cats}});svFailQ();
+    sErr('נשמר מקומית, יסונכרן בקרוב');
+  }
 }
 async function pB(){
   svLocal();
   if(!dbReady){writeQ.push(()=>pB());return}
-  try{await dbWrite(()=>dbRef.doc("config/bud").set({items:bud}))}catch(e){}
+  try{await dbWrite(()=>dbRef.doc("config/bud").set({items:bud}))}catch(e){
+    failQ.push({op:'set',path:'config/bud',data:{items:bud}});svFailQ();
+    sErr('נשמר מקומית, יסונכרן בקרוב');
+  }
 }
 async function pTA(t){
   svLocal();
   if(!dbReady){writeQ.push(()=>pTA(t));return}
-  try{await dbWrite(()=>dbRef.doc("txs/"+t.id).set({catId:t.catId,amount:t.amount,date:t.date,note:t.note||'',by:t.by||''}))}catch(e){}
+  try{await dbWrite(()=>dbRef.doc("txs/"+t.id).set({catId:t.catId,amount:t.amount,date:t.date,note:t.note||'',by:t.by||''}))}catch(e){
+    failQ.push({op:'set',path:'txs/'+t.id,data:{catId:t.catId,amount:t.amount,date:t.date,note:t.note||'',by:t.by||''}});svFailQ();
+    sErr('נשמר מקומית, יסונכרן בקרוב');
+  }
 }
 async function pTD(id){
   svLocal();
   if(!dbReady){writeQ.push(()=>pTD(id));return}
-  try{await dbWrite(()=>dbRef.doc("txs/"+String(id)).delete())}catch(e){}
+  try{await dbWrite(()=>dbRef.doc("txs/"+String(id)).delete())}catch(e){
+    failQ.push({op:'del',path:'txs/'+String(id)});svFailQ();
+    sErr('נשמר מקומית, יסונכרן בקרוב');
+  }
 }
 
 function f(n){return Math.abs(n).toLocaleString('he-IL',{maximumFractionDigits:0})}

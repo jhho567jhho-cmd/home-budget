@@ -123,7 +123,7 @@ export default function Home() {
   )
 
   const budgetAlerts = useMemo(() => {
-    const alerts = []
+    const alerts: any[] = []
     const categoryTotals = new Map<string, number>()
 
     expenses.forEach((exp) => {

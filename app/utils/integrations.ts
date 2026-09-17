@@ -210,7 +210,7 @@ export function handleWebhook(payload: WebhookPayload): void {
 export async function makeIntegrationRequest(
   integrationId: string,
   endpoint: string,
-  method: 'GET' | 'POST' = 'GET',
+  method: 'GET' | 'POST' | 'PUT' = 'GET',
   data?: any
 ): Promise<any> {
   const config = integrationManager['config'].get(integrationId)

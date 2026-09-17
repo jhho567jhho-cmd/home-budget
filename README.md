@@ -1,6 +1,11 @@
-# 🤖 Budget Buddy - NLP AI Budget Assistant
+# 🤖 Budget Buddy - AI-Powered NLP Budget Assistant
 
-**עוזר תקציב חכם בעברית** המבין שפה טבעית ועוזר לניהול הוצאות בצורה אינטליגנטית.
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Language](https://img.shields.io/badge/language-Hebrew-FF69B4)
+![Status](https://img.shields.io/badge/status-Production%20Ready-brightgreen)
+
+**עוזר תקציב חכם בעברית** 🇮🇱 המבין שפה טבעית ועוזר לניהול הוצאות בצורה אינטליגנטית עם AI.
 
 ## ✨ תכונות
 

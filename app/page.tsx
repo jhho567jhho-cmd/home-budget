@@ -1,8 +1,16 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { ChatMessage } from './components/ChatMessage'
 import { ChatInput } from './components/ChatInput'
+import { AnalyticsPanel } from './components/AnalyticsPanel'
+import {
+  detectRecurringPatterns,
+  generateSavingsSuggestions,
+  checkBudgetAlerts,
+  generateContextualMessage,
+  predictMonthlySpending,
+} from './utils/nlpAdvanced'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -95,6 +103,44 @@ export default function Home() {
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0)
   const categories = [...new Set(expenses.map((exp) => exp.category))]
 
+  // Advanced Analytics
+  const recurringPatterns = useMemo(
+    () =>
+      detectRecurringPatterns(
+        expenses.map((e) => ({
+          description: e.description,
+          amount: e.amount,
+          category: e.category,
+          date: e.timestamp,
+        }))
+      ),
+    [expenses]
+  )
+
+  const savingsSuggestions = useMemo(
+    () => generateSavingsSuggestions(expenses),
+    [expenses]
+  )
+
+  const budgetAlerts = useMemo(() => {
+    const alerts = []
+    const categoryTotals = new Map<string, number>()
+
+    expenses.forEach((exp) => {
+      categoryTotals.set(exp.category, (categoryTotals.get(exp.category) || 0) + exp.amount)
+    })
+
+    categoryTotals.forEach((total, category) => {
+      const budgetLimit = 5000 // Default monthly budget
+      const alert = checkBudgetAlerts(total, budgetLimit, category)
+      if (alert) alerts.push(alert)
+    })
+
+    return alerts
+  }, [expenses])
+
+  const predictedMonthly = useMemo(() => predictMonthlySpending(expenses.map(e => ({ amount: e.amount, date: e.timestamp }))), [expenses])
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-black">
       {/* Chat Section */}
@@ -140,8 +186,15 @@ export default function Home() {
       </div>
 
       {/* Stats Sidebar */}
-      <div className="w-80 bg-black/50 backdrop-blur-sm border-l border-purple-500/20 p-6 overflow-y-auto">
+      <div className="w-96 bg-black/50 backdrop-blur-sm border-l border-purple-500/20 p-6 overflow-y-auto">
         <div className="space-y-6">
+          {/* Advanced Analytics */}
+          <AnalyticsPanel
+            recurring={recurringPatterns}
+            suggestions={savingsSuggestions}
+            alerts={budgetAlerts}
+            predictedMonthly={predictedMonthly}
+          />
           {/* Summary */}
           <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg p-6">
             <p className="text-gray-200 text-sm mb-2">סך הוצאות</p>

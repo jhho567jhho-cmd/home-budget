@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { VoiceInput } from './VoiceInput'
 
 interface ChatInputProps {
   onSend: (message: string) => void
@@ -42,6 +43,18 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
         placeholder="כתוב הוצאה... (למשל: קניתי לחם ב-12 שקל)"
         disabled={isLoading}
         className="flex-1 px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:border-indigo-500 text-white placeholder-gray-500"
+      />
+      <VoiceInput
+        onTranscript={(text) => {
+          setMessage(text)
+          // Auto-submit voice input
+          setTimeout(() => {
+            const event = new Event('submit', { bubbles: true }) as any
+            event.preventDefault = () => {}
+            handleSubmit(event)
+          }, 100)
+        }}
+        disabled={isLoading}
       />
       <button
         type="submit"

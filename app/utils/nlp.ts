@@ -118,3 +118,14 @@ export function generateResponse(expenseData: ExpenseData): string {
 
   return 'בואו תהיו יותר ספציפיים! כמה הוצאתם בדיוק? 💭';
 }
+
+// Check if text is in Hebrew
+export function isHebrew(text: string): boolean {
+  const hebrewRegex = /[֐-׿]/;
+  return hebrewRegex.test(text);
+}
+
+// Validate amount
+export function isValidAmount(amount: number | null): boolean {
+  return amount !== null && amount > 0 && amount < 1000000;
+}

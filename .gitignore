@@ -1,8 +1,14 @@
 node_modules/
 .next/
 out/
-dist/
 .env
 .env.local
 .env.*.local
 *.log
+dist/
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

@@ -1,7 +1,7 @@
 {
-  "name": "home-budget",
-  "version": "0.1.0",
-  "private": true,
+  "name": "budget-buddy-nlp",
+  "version": "1.0.0",
+  "description": "AI-powered budget assistant with Hebrew NLP",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,15 +12,15 @@
     "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@prisma/client": "^5.0.0",
-    "tailwindcss": "^3.3.0",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0"
+    "axios": "^1.6.0",
+    "@xenova/transformers": "^2.6.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "typescript": "^5.0.0",
-    "prisma": "^5.0.0"
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
   }
 }

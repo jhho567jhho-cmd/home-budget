@@ -7,6 +7,7 @@ import { ClientsProvider } from './context/ClientsContext'
 import { MeetingsProvider } from './context/MeetingsContext'
 import { TasksProvider } from './context/TasksContext'
 import { NotesProvider } from './context/NotesContext'
+import { ConversationProvider } from './context/ConversationContext'
 
 export default function Page() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -51,7 +52,9 @@ export default function Page() {
       <MeetingsProvider>
         <TasksProvider>
           <NotesProvider>
-            <Home userEmail={userEmail} onLogout={handleLogout} />
+            <ConversationProvider>
+              <Home userEmail={userEmail} onLogout={handleLogout} />
+            </ConversationProvider>
           </NotesProvider>
         </TasksProvider>
       </MeetingsProvider>

@@ -63,11 +63,21 @@ export interface Task {
 }
 
 // ========== Knowledge Base ==========
+export type KnowledgeType = 'article' | 'exercise' | 'technique' | 'template' | 'resource' | 'video'
+export type KnowledgeCategory = 'nlp-basics' | 'coaching-techniques' | 'client-outcomes' | 'templates' | 'tools' | 'research'
+
 export interface KnowledgeItem {
   id: string
   title: string
-  type: 'pdf' | 'document' | 'image' | 'text' | 'exercise'
-  content: string // URL או תוכן
+  type: KnowledgeType
+  category: KnowledgeCategory
+  description: string
+  content: string // טקסט מלא או URL
+  tags: string[]
+  author?: string
+  source?: string
+  importance: 'low' | 'medium' | 'high'
+  language: 'he' | 'en'
   createdAt: string
   updatedAt: string
 }

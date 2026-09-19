@@ -1,10 +1,13 @@
 'use client'
 
+import { type TabType } from '../BottomNav'
+
 interface MoreScreenProps {
   onLogout: () => void
+  onNavigate?: (tab: TabType) => void
 }
 
-export default function MoreScreen({ onLogout }: MoreScreenProps) {
+export default function MoreScreen({ onLogout, onNavigate }: MoreScreenProps) {
   return (
     <div className="px-4 pt-6 pb-6 max-w-2xl mx-auto">
       {/* Header */}
@@ -13,7 +16,10 @@ export default function MoreScreen({ onLogout }: MoreScreenProps) {
       {/* Menu Items */}
       <div className="space-y-3 mb-8">
         {/* Knowledge Library */}
-        <button className="w-full bg-white border border-slate-200 rounded-lg p-4 text-right hover:bg-slate-50 transition flex items-center justify-between">
+        <button
+          onClick={() => onNavigate?.('knowledge')}
+          className="w-full bg-white border border-slate-200 rounded-lg p-4 text-right hover:bg-slate-50 transition flex items-center justify-between"
+        >
           <span className="text-2xl">📚</span>
           <div>
             <div className="font-semibold text-slate-800">ספריית הידע שלי</div>

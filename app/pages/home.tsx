@@ -1,15 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import BottomNav from '../components/BottomNav'
+import BottomNav, { type TabType } from '../components/BottomNav'
 import HomeScreen from '../components/screens/HomeScreen'
 import ClientsScreen from '../components/screens/ClientsScreen'
 import ClientDetailScreen from '../components/screens/ClientDetailScreen'
 import CalendarScreen from '../components/screens/CalendarScreen'
 import AIScreen from '../components/screens/AIScreen'
+import KnowledgeBaseScreen from '../components/screens/KnowledgeBaseScreen'
 import MoreScreen from '../components/screens/MoreScreen'
-
-type TabType = 'home' | 'clients' | 'calendar' | 'ai' | 'more'
 
 interface HomeProps {
   userEmail: string
@@ -40,8 +39,10 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
         return <CalendarScreen />
       case 'ai':
         return <AIScreen />
+      case 'knowledge':
+        return <KnowledgeBaseScreen userEmail={userEmail} />
       case 'more':
-        return <MoreScreen onLogout={onLogout} />
+        return <MoreScreen onLogout={onLogout} onNavigate={setActiveTab} />
       default:
         return <HomeScreen userEmail={userEmail} />
     }

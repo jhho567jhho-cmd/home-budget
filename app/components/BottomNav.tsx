@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-type TabType = 'home' | 'clients' | 'calendar' | 'ai' | 'more'
+export type TabType = 'home' | 'clients' | 'calendar' | 'ai' | 'knowledge' | 'more'
 
 interface BottomNavProps {
   activeTab: TabType
@@ -19,6 +19,7 @@ const tabs: Array<{
   { id: 'clients', label: 'לקוחות', icon: '👥', ariaLabel: 'ניהול לקוחות' },
   { id: 'calendar', label: 'יומן', icon: '📅', ariaLabel: 'יומן ופגישות' },
   { id: 'ai', label: 'AI', icon: '🤖', ariaLabel: 'עוזרת AI' },
+  { id: 'knowledge', label: 'ידע', icon: '📚', ariaLabel: 'ספריית הידע' },
   { id: 'more', label: 'עוד', icon: '⚙️', ariaLabel: 'עוד אפשרויות' },
 ]
 

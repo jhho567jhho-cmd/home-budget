@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Budget Buddy - עוזר תקציב חכם',
-  description: 'עוזר AI אינטליגנטי לניהול תקציב בעברית',
+  title: 'NLP Coach - עוזרת מקצועית',
+  description: 'אפליקציה פרטית למאמנת/מטפלת NLP',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
 }
 
 export default function RootLayout({
@@ -13,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="he" dir="rtl">
-      <body className="bg-gradient-to-br from-purple-900 via-indigo-900 to-black text-white">
+      <head>
+        <meta charSet="utf-8" />
+      </head>
+      <body className="bg-gradient-to-b from-slate-50 to-slate-100 text-slate-900">
         {children}
       </body>
     </html>

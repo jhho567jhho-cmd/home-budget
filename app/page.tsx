@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import Login from './components/Login'
 import Home from './pages/home'
 import { ClientsProvider } from './context/ClientsContext'
+import { MeetingsProvider } from './context/MeetingsContext'
+import { TasksProvider } from './context/TasksContext'
 
 export default function Page() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -45,7 +47,11 @@ export default function Page() {
 
   return isLoggedIn ? (
     <ClientsProvider>
-      <Home userEmail={userEmail} onLogout={handleLogout} />
+      <MeetingsProvider>
+        <TasksProvider>
+          <Home userEmail={userEmail} onLogout={handleLogout} />
+        </TasksProvider>
+      </MeetingsProvider>
     </ClientsProvider>
   ) : (
     <Login onLogin={handleLogin} />

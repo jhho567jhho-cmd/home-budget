@@ -7,7 +7,11 @@ import AddClientModal from '../modals/AddClientModal'
 
 type FilterStatus = 'all' | 'active' | 'new' | 'followup'
 
-export default function ClientsScreen() {
+interface ClientsScreenProps {
+  onSelectClient?: (clientId: string) => void
+}
+
+export default function ClientsScreen({ onSelectClient }: ClientsScreenProps) {
   const { clients, searchClients, getClientsByStatus } = useClients()
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
@@ -80,9 +84,10 @@ export default function ClientsScreen() {
       ) : (
         <div className="space-y-3 mb-6">
           {displayedClients.map((client) => (
-            <div
+            <button
               key={client.id}
-              className="bg-white rounded-lg shadow-sm p-4 border border-slate-200 hover:shadow-md transition cursor-pointer text-right"
+              onClick={() => onSelectClient?.(client.id)}
+              className="w-full bg-white rounded-lg shadow-sm p-4 border border-slate-200 hover:shadow-md transition text-right"
             >
               <div className="font-semibold text-slate-800">{client.name}</div>
               {client.phone && <div className="text-sm text-slate-600">📱 {client.phone}</div>}
@@ -106,7 +111,7 @@ export default function ClientsScreen() {
                     : 'לא פעיל'}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       )}

@@ -4,9 +4,11 @@ import { useState } from 'react'
 import { useClients } from '@/app/context/ClientsContext'
 import { useMeetings } from '@/app/context/MeetingsContext'
 import { useTasks } from '@/app/context/TasksContext'
+import { useNotes } from '@/app/context/NotesContext'
 import { formatDate } from '@/app/utils/dateUtils'
 import AddMeetingModal from '../modals/AddMeetingModal'
 import AddTaskModal from '../modals/AddTaskModal'
+import AddNoteModal from '../modals/AddNoteModal'
 
 interface ClientDetailScreenProps {
   clientId: string
@@ -17,13 +19,16 @@ export default function ClientDetailScreen({ clientId, onBack }: ClientDetailScr
   const { getClient, updateClient, deleteClient } = useClients()
   const { getMeetingsByClient } = useMeetings()
   const { getTasksByClient } = useTasks()
+  const { getNotesByClient, deleteNote } = useNotes()
 
   const client = getClient(clientId)
   const clientMeetings = getMeetingsByClient(clientId)
   const clientTasks = getTasksByClient(clientId)
+  const clientNotes = getNotesByClient(clientId)
 
   const [showAddMeeting, setShowAddMeeting] = useState(false)
   const [showAddTask, setShowAddTask] = useState(false)
+  const [showAddNote, setShowAddNote] = useState(false)
   const [showEditMode, setShowEditMode] = useState(false)
   const [editForm, setEditForm] = useState(client ? { ...client } : null)
 
@@ -225,13 +230,69 @@ export default function ClientDetailScreen({ clientId, onBack }: ClientDetailScr
           )}
         </div>
 
-        {/* Notes */}
+        {/* Client Default Notes */}
         {client.notes && (
           <div className="bg-slate-50 rounded-lg p-6 border border-slate-200 mb-6">
-            <h2 className="font-semibold text-slate-800 mb-3">📝 הערות</h2>
-            <p className="text-slate-700 whitespace-pre-wrap">{client.notes}</p>
+            <h2 className="font-semibold text-slate-800 mb-3">📌 הערות כלליות</h2>
+            <p className="text-slate-700 whitespace-pre-wrap text-sm">{client.notes}</p>
           </div>
         )}
+
+        {/* Client Notes */}
+        <div className="bg-white rounded-lg p-6 border border-slate-200 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={() => setShowAddNote(true)}
+              className="text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200"
+            >
+              + הערה
+            </button>
+            <h2 className="font-semibold text-slate-800">📝 הערות ({clientNotes.length})</h2>
+          </div>
+          {clientNotes.length === 0 ? (
+            <p className="text-slate-500 text-sm">אין הערות עדיין</p>
+          ) : (
+            <div className="space-y-3">
+              {clientNotes.map((note) => (
+                <div key={note.id} className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <p className="text-slate-800 text-sm whitespace-pre-wrap">{note.content}</p>
+                      <div className="text-xs text-slate-500 mt-2">
+                        {new Date(note.createdAt).toLocaleDateString('he-IL')}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => deleteNote(note.id)}
+                      className="text-sm text-red-600 hover:text-red-700 hover:bg-red-100 px-2 py-1 rounded"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* AI Helper Section */}
+        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-6 border border-indigo-200 mb-6">
+          <div className="flex items-start gap-3">
+            <div className="text-3xl">🤖</div>
+            <div className="flex-1">
+              <h2 className="font-semibold text-slate-800 mb-2">עזרה מ-AI</h2>
+              <p className="text-slate-700 text-sm mb-4">
+                קבל הצעות מותאמות מ-AI עבור התכנית של הלקוח הזה
+              </p>
+              <button className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-semibold text-sm">
+                💬 פתח צ'אט עם AI
+              </button>
+              <p className="text-xs text-slate-600 mt-3 text-center">
+                ✨ בקרוב: חיבור ל-OpenAI לייעוצים מותאמים
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Delete Button */}
         <button
@@ -251,6 +312,9 @@ export default function ClientDetailScreen({ clientId, onBack }: ClientDetailScr
       )}
       {showAddTask && (
         <AddTaskModal clientId={clientId} onClose={() => setShowAddTask(false)} />
+      )}
+      {showAddNote && (
+        <AddNoteModal clientId={clientId} onClose={() => setShowAddNote(false)} />
       )}
     </div>
   )

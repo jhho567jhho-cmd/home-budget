@@ -6,6 +6,7 @@ import Home from './pages/home'
 import { ClientsProvider } from './context/ClientsContext'
 import { MeetingsProvider } from './context/MeetingsContext'
 import { TasksProvider } from './context/TasksContext'
+import { NotesProvider } from './context/NotesContext'
 
 export default function Page() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -49,7 +50,9 @@ export default function Page() {
     <ClientsProvider>
       <MeetingsProvider>
         <TasksProvider>
-          <Home userEmail={userEmail} onLogout={handleLogout} />
+          <NotesProvider>
+            <Home userEmail={userEmail} onLogout={handleLogout} />
+          </NotesProvider>
         </TasksProvider>
       </MeetingsProvider>
     </ClientsProvider>

@@ -23,7 +23,7 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
       </head>
-      <body className="bg-gradient-to-b from-slate-50 to-slate-100 text-slate-900">
+      <body className="bg-slate-900 text-white min-h-screen">
         {children}
       </body>
     </html>

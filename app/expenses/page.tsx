@@ -2,37 +2,26 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-
-interface Expense {
-  id: number
-  description: string
-  amount: number
-  category: string
-  date: string
-}
+import { useExpenses } from '@/app/context/ExpensesContext'
+import { useClients } from '@/app/context/ClientsContext'
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<Expense[]>([
-    { id: 1, description: 'קניות במכולת', amount: 150, category: 'קניות', date: '2026-09-17' },
-    { id: 2, description: 'חשמל', amount: 200, category: 'שירותים', date: '2026-09-15' },
-  ])
-
-  const [formData, setFormData] = useState({ description: '', amount: '', category: '', date: '' })
+  const { expenses, addExpense } = useExpenses()
+  const { clients } = useClients()
+  const [formData, setFormData] = useState({ description: '', amount: '', category: '', date: '', clientId: '', clientName: '' })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (formData.description && formData.amount && formData.category && formData.date) {
-      setExpenses([
-        ...expenses,
-        {
-          id: expenses.length + 1,
-          description: formData.description,
-          amount: parseFloat(formData.amount),
-          category: formData.category,
-          date: formData.date,
-        },
-      ])
-      setFormData({ description: '', amount: '', category: '', date: '' })
+      addExpense({
+        description: formData.description,
+        amount: parseFloat(formData.amount),
+        category: formData.category,
+        date: formData.date,
+        clientId: formData.clientId || undefined,
+        clientName: formData.clientName || undefined,
+      })
+      setFormData({ description: '', amount: '', category: '', date: '', clientId: '', clientName: '' })
     }
   }
 
@@ -40,16 +29,16 @@ export default function ExpensesPage() {
   const categories = [...new Set(expenses.map(e => e.category))]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-900">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="bg-gradient-to-r from-slate-800 to-slate-900 shadow-lg border-b border-slate-700">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-indigo-600">ניהול הוצאות</h1>
-              <p className="text-gray-600 mt-2">עקוב אחרי כל הוצאותיך</p>
+              <h1 className="text-3xl font-bold text-white">ניהול הוצאות</h1>
+              <p className="text-gray-400 mt-2">עקוב אחרי כל הוצאותיך</p>
             </div>
-            <Link href="/" className="text-indigo-600 hover:text-indigo-700 font-semibold">
+            <Link href="/" className="text-blue-400 hover:text-blue-300 font-semibold">
               ← חזרה לעמוד הבית
             </Link>
           </div>
@@ -60,11 +49,11 @@ export default function ExpensesPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Form */}
           <div className="md:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
               <h2 className="text-xl font-bold mb-4">הוסף הוצאה חדשה</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold mb-2">תיאור</label>
+                  <label className="block text-sm font-semibold opacity-90 mb-2">תיאור</label>
                   <input
                     type="text"
                     value={formData.description}
@@ -109,6 +98,28 @@ export default function ExpensesPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2">לקוח (אופציונלי)</label>
+                  <select
+                    value={formData.clientId}
+                    onChange={(e) => {
+                      const selectedClient = clients.find(c => c.id === e.target.value)
+                      setFormData({
+                        ...formData,
+                        clientId: e.target.value,
+                        clientName: selectedClient?.name || ''
+                      })
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <option value="">-- לא בחרת לקוח --</option>
+                    {clients.map((client) => (
+                      <option key={client.id} value={client.id}>
+                        {client.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <button
                   type="submit"
                   className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition"
@@ -123,42 +134,52 @@ export default function ExpensesPage() {
           <div className="md:col-span-2 space-y-6">
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-lg shadow p-6">
-                <p className="text-gray-600 text-sm">סך הוצאות</p>
-                <p className="text-3xl font-bold text-indigo-600">₪{totalExpenses.toFixed(2)}</p>
+              <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-lg p-6 text-white">
+                <p className="text-red-100 text-sm opacity-90">סך הוצאות</p>
+                <p className="text-3xl font-bold mt-2">₪{totalExpenses.toFixed(2)}</p>
               </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <p className="text-gray-600 text-sm">מספר הוצאות</p>
-                <p className="text-3xl font-bold text-indigo-600">{expenses.length}</p>
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
+                <p className="text-purple-100 text-sm opacity-90">מספר הוצאות</p>
+                <p className="text-3xl font-bold mt-2">{expenses.length}</p>
               </div>
             </div>
 
             {/* Expenses List */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-6 border-b">
-                <h2 className="text-xl font-bold">רשימת הוצאות</h2>
+            <div className="bg-slate-800 rounded-2xl shadow-lg overflow-hidden">
+              <div className="p-6 border-b border-slate-700">
+                <h2 className="text-xl font-bold text-white">רשימת הוצאות</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-slate-700">
                     <tr>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">תיאור</th>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">קטגוריה</th>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">סכום</th>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">תאריך</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">תיאור</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">לקוח</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">קטגוריה</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">סכום</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">תאריך</th>
                     </tr>
                   </thead>
                   <tbody>
                     {expenses.map((expense) => (
-                      <tr key={expense.id} className="border-t hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm">{expense.description}</td>
+                      <tr key={expense.id} className="border-t border-slate-700 hover:bg-slate-700 transition">
+                        <td className="px-6 py-4 text-sm text-gray-300">{expense.description}</td>
                         <td className="px-6 py-4 text-sm">
-                          <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold">
+                          {expense.clientName ? (
+                            <span className="px-3 py-1 bg-blue-900 bg-opacity-50 text-blue-200 rounded-full text-xs font-semibold">
+                              {expense.clientName}
+                            </span>
+                          ) : (
+                            <span className="text-gray-500 text-xs">-</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          <span className="px-3 py-1 bg-purple-900 bg-opacity-50 text-purple-200 rounded-full text-xs font-semibold">
                             {expense.category}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm font-semibold">₪{expense.amount.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-600">{expense.date}</td>
+                        <td className="px-6 py-4 text-sm font-semibold text-gray-200">₪{expense.amount.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-400">{expense.date}</td>
                       </tr>
                     ))}
                   </tbody>

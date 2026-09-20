@@ -10,6 +10,27 @@ interface HomeScreenProps {
   userEmail: string
 }
 
+// Enhanced analytics utilities
+const calculateMonthlyStats = (meetings: any[], tasks: any[], clients: any[]) => {
+  const today = new Date()
+  const currentMonth = today.getMonth()
+  const currentYear = today.getFullYear()
+
+  const monthlyMeetings = meetings.filter((m) => {
+    const meetingDate = new Date(m.date)
+    return meetingDate.getMonth() === currentMonth && meetingDate.getFullYear() === currentYear
+  }).length
+
+  const monthlyTasks = tasks.filter((t) => {
+    const taskDate = new Date(t.dueDate)
+    return taskDate.getMonth() === currentMonth && taskDate.getFullYear() === currentYear
+  }).length
+
+  const completedTasks = tasks.filter((t) => t.status === 'completed').length
+
+  return { monthlyMeetings, monthlyTasks, completedTasks }
+}
+
 export default function HomeScreen({ userEmail }: HomeScreenProps) {
   const [userName] = useState('דנה')
   const currentDate = getCurrentDate()
@@ -33,6 +54,28 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
   // לקוחות דורשים מעקב
   const followupClients = useMemo(() => getClientsByStatus('followup'), [getClientsByStatus])
 
+  // Calculate enhanced stats
+  const stats = useMemo(() => calculateMonthlyStats(meetings, tasks, clients), [meetings, tasks, clients])
+
+  // Export functionality
+  const handleExportData = () => {
+    const data = {
+      meetings,
+      tasks,
+      clients,
+      exportDate: new Date().toISOString(),
+      userEmail,
+    }
+    const jsonString = JSON.stringify(data, null, 2)
+    const element = document.createElement('a')
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonString))
+    element.setAttribute('download', `budget-buddy-backup-${new Date().toISOString().split('T')[0]}.json`)
+    element.style.display = 'none'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+
   return (
     <div className="px-4 pt-6 pb-6 max-w-2xl mx-auto">
       {/* Header */}
@@ -55,6 +98,35 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
           </div>
           <div className="text-sm text-slate-600">משימות להיום</div>
         </div>
+      </div>
+
+      {/* Enhanced Monthly Analytics */}
+      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 mb-8 border border-purple-200">
+        <h2 className="text-lg font-semibold text-slate-800 mb-4">📊 סיכום חודשי</h2>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+            <div className="text-2xl font-bold text-purple-600">{stats.monthlyMeetings}</div>
+            <div className="text-xs text-slate-600">פגישות בחודש</div>
+          </div>
+          <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+            <div className="text-2xl font-bold text-blue-600">{stats.monthlyTasks}</div>
+            <div className="text-xs text-slate-600">משימות בחודש</div>
+          </div>
+          <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+            <div className="text-2xl font-bold text-green-600">{stats.completedTasks}</div>
+            <div className="text-xs text-slate-600">משימות הושלמו</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Export & Actions */}
+      <div className="flex gap-3 mb-8">
+        <button
+          onClick={handleExportData}
+          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition"
+        >
+          💾 ייצוא נתונים
+        </button>
       </div>
 
       {/* Today's Meetings */}

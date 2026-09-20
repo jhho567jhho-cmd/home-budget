@@ -36,20 +36,20 @@ export default function Login({ onLogin }: LoginProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 px-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-5xl mb-4">💰</div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">Budget Buddy</h1>
-          <p className="text-slate-600">אפליקציה פרטית לניהול תקציב ביתי</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Budget Buddy</h1>
+          <p className="text-gray-400">אפליקציה פרטית לניהול תקציב ביתי</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl shadow-lg p-8 space-y-6">
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-blue-100 mb-2">
               אימייל
             </label>
             <input
@@ -58,14 +58,14 @@ export default function Login({ onLogin }: LoginProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-right"
+              className="w-full px-4 py-3 rounded-lg border border-blue-300 bg-white text-slate-900 focus:border-white focus:ring-2 focus:ring-blue-300 text-right"
               dir="rtl"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-blue-100 mb-2">
               סיסמה
             </label>
             <input
@@ -74,14 +74,14 @@ export default function Login({ onLogin }: LoginProps) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-right"
+              className="w-full px-4 py-3 rounded-lg border border-blue-300 bg-white text-slate-900 focus:border-white focus:ring-2 focus:ring-blue-300 text-right"
               dir="rtl"
             />
           </div>
 
           {/* Error message */}
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-right">
+            <div className="p-4 bg-red-900 bg-opacity-50 border border-red-400 rounded-lg text-red-200 text-sm text-right">
               {error}
             </div>
           )}
@@ -90,7 +90,7 @@ export default function Login({ onLogin }: LoginProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white font-semibold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2"
+            className="w-full bg-white text-blue-600 hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 font-semibold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>
@@ -103,9 +103,9 @@ export default function Login({ onLogin }: LoginProps) {
           </button>
 
           {/* Help text */}
-          <div className="text-center text-sm text-slate-600 space-y-2">
+          <div className="text-center text-sm text-blue-100 space-y-2">
             <p>אפליקציה פרטית לניהול תקציב ביתי</p>
-            <p className="text-xs text-slate-500">היכנסו עם כל אימייל וסיסמה (הרשמה אוטומטית)</p>
+            <p className="text-xs text-blue-200 opacity-75">היכנסו עם כל אימייל וסיסמה (הרשמה אוטומטית)</p>
           </div>
         </form>
       </div>

@@ -92,16 +92,16 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
     <div className="space-y-6">
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <button onClick={() => setSelectedCard('expenses')} className="text-left hover:scale-105 transition-transform">
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 shadow-lg text-white cursor-pointer">
+        <button onClick={() => setSelectedCard('expenses')} className="w-full text-left p-0 hover:scale-105 transition-transform duration-200 bg-transparent border-none cursor-pointer">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 shadow-lg text-white">
             <p className="text-sm font-medium opacity-90">הוצאות חודש זה</p>
             <p className="text-3xl font-bold mt-2">₪{totalSpent.toFixed(2)}</p>
             <p className="text-xs opacity-75 mt-2">מתוך תקציב של ₪{monthlyBudget.toFixed(2)}</p>
           </div>
         </button>
 
-        <button onClick={() => setSelectedCard('trend')} className="text-left hover:scale-105 transition-transform">
-          <div className={`bg-gradient-to-br ${spendingTrend === 'over' ? 'from-red-500 to-red-600' : 'from-green-500 to-emerald-600'} rounded-2xl p-6 shadow-lg text-white cursor-pointer`}>
+        <button onClick={() => setSelectedCard('trend')} className="w-full text-left p-0 hover:scale-105 transition-transform duration-200 bg-transparent border-none cursor-pointer">
+          <div className={`bg-gradient-to-br ${spendingTrend === 'over' ? 'from-red-500 to-red-600' : 'from-green-500 to-emerald-600'} rounded-2xl p-6 shadow-lg text-white`}>
             <p className="text-sm font-medium opacity-90">
               {spendingTrend === 'over' ? '⚠️ הוצאות גבוהות מהצפי' : '✅ הוצאות בשליטה'}
             </p>
@@ -117,8 +117,8 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
           </div>
         </button>
 
-        <button onClick={() => setSelectedCard('remaining')} className="text-left hover:scale-105 transition-transform">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 shadow-lg text-white cursor-pointer">
+        <button onClick={() => setSelectedCard('remaining')} className="w-full text-left p-0 hover:scale-105 transition-transform duration-200 bg-transparent border-none cursor-pointer">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 shadow-lg text-white">
             <p className="text-sm font-medium opacity-90">התחזוקה לשאר החודש</p>
             <p className="text-3xl font-bold mt-2">
               ₪{remainingBudget.toFixed(2)}
@@ -131,8 +131,8 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
           </div>
         </button>
 
-        <button onClick={() => setSelectedCard('projected')} className="text-left hover:scale-105 transition-transform">
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 shadow-lg text-white cursor-pointer">
+        <button onClick={() => setSelectedCard('projected')} className="w-full text-left p-0 hover:scale-105 transition-transform duration-200 bg-transparent border-none cursor-pointer">
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 shadow-lg text-white">
             <p className="text-sm font-medium opacity-90">התחזוקה משוערת</p>
             <p className="text-3xl font-bold mt-2">₪{projectedMonthlySpend.toFixed(2)}</p>
             <p className="text-xs opacity-75 mt-2">

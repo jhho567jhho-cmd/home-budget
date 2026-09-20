@@ -8,6 +8,8 @@ export interface Expense {
   amount: number
   category: string
   date: string
+  clientId?: string
+  clientName?: string
 }
 
 interface ExpensesContextType {
@@ -18,6 +20,9 @@ interface ExpensesContextType {
   getMonthlyExpenses: (month: number, year: number) => Expense[]
   getTotalMonthlySpending: (month: number, year: number) => number
   getCategoryBreakdown: (month: number, year: number) => Record<string, number>
+  getClientExpenses: (clientId: string) => Expense[]
+  getClientTotalSpending: (clientId: string) => number
+  getClientsBreakdown: () => Record<string, number>
 }
 
 const ExpensesContext = createContext<ExpensesContextType | undefined>(undefined)
@@ -74,6 +79,24 @@ export function ExpensesProvider({ children }: { children: ReactNode }) {
     return breakdown
   }
 
+  const getClientExpenses = (clientId: string) => {
+    return expenses.filter((e) => e.clientId === clientId)
+  }
+
+  const getClientTotalSpending = (clientId: string) => {
+    return getClientExpenses(clientId).reduce((sum, e) => sum + e.amount, 0)
+  }
+
+  const getClientsBreakdown = () => {
+    const breakdown: Record<string, number> = {}
+    expenses.forEach((e) => {
+      if (e.clientName) {
+        breakdown[e.clientName] = (breakdown[e.clientName] || 0) + e.amount
+      }
+    })
+    return breakdown
+  }
+
   return (
     <ExpensesContext.Provider
       value={{
@@ -84,6 +107,9 @@ export function ExpensesProvider({ children }: { children: ReactNode }) {
         getMonthlyExpenses,
         getTotalMonthlySpending,
         getCategoryBreakdown,
+        getClientExpenses,
+        getClientTotalSpending,
+        getClientsBreakdown,
       }}
     >
       {children}

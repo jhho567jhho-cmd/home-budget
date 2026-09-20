@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useExpenses } from '@/app/context/ExpensesContext'
+import { useClients } from '@/app/context/ClientsContext'
 
 export default function ExpensesPage() {
   const { expenses, addExpense } = useExpenses()
-  const [formData, setFormData] = useState({ description: '', amount: '', category: '', date: '' })
+  const { clients } = useClients()
+  const [formData, setFormData] = useState({ description: '', amount: '', category: '', date: '', clientId: '', clientName: '' })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -16,8 +18,10 @@ export default function ExpensesPage() {
         amount: parseFloat(formData.amount),
         category: formData.category,
         date: formData.date,
+        clientId: formData.clientId || undefined,
+        clientName: formData.clientName || undefined,
       })
-      setFormData({ description: '', amount: '', category: '', date: '' })
+      setFormData({ description: '', amount: '', category: '', date: '', clientId: '', clientName: '' })
     }
   }
 
@@ -94,6 +98,28 @@ export default function ExpensesPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2">לקוח (אופציונלי)</label>
+                  <select
+                    value={formData.clientId}
+                    onChange={(e) => {
+                      const selectedClient = clients.find(c => c.id === e.target.value)
+                      setFormData({
+                        ...formData,
+                        clientId: e.target.value,
+                        clientName: selectedClient?.name || ''
+                      })
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <option value="">-- לא בחרת לקוח --</option>
+                    {clients.map((client) => (
+                      <option key={client.id} value={client.id}>
+                        {client.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <button
                   type="submit"
                   className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition"
@@ -128,6 +154,7 @@ export default function ExpensesPage() {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">תיאור</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">לקוח</th>
                       <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">קטגוריה</th>
                       <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">סכום</th>
                       <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">תאריך</th>
@@ -137,6 +164,15 @@ export default function ExpensesPage() {
                     {expenses.map((expense) => (
                       <tr key={expense.id} className="border-t hover:bg-gray-50">
                         <td className="px-6 py-4 text-sm">{expense.description}</td>
+                        <td className="px-6 py-4 text-sm">
+                          {expense.clientName ? (
+                            <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                              {expense.clientName}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 text-xs">-</span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 text-sm">
                           <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold">
                             {expense.category}

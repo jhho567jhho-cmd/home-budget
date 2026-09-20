@@ -44,32 +44,32 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
         <h1 className="text-3xl font-bold text-white mb-2">
           {greeting}, {userName}! 👋
         </h1>
-        <p className="text-blue-200">{currentDate}</p>
+        <p className="text-blue-100">{currentDate}</p>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-4 text-center border border-blue-400">
-          <div className="text-3xl font-bold text-white mb-1">{todaysMeetings.length}</div>
-          <div className="text-sm text-blue-100">פגישות היום</div>
+        <div className="bg-white/95 rounded-lg p-4 text-center border border-gray-200">
+          <div className="text-3xl font-bold text-blue-600 mb-1">{todaysMeetings.length}</div>
+          <div className="text-sm text-slate-700">פגישות היום</div>
         </div>
-        <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg p-4 text-center border border-green-400">
-          <div className="text-3xl font-bold text-white mb-1">
+        <div className="bg-white/95 rounded-lg p-4 text-center border border-gray-200">
+          <div className="text-3xl font-bold text-green-600 mb-1">
             {todaysTasks.filter((t) => t.status !== 'completed').length}
           </div>
-          <div className="text-sm text-green-100">משימות להיום</div>
+          <div className="text-sm text-slate-700">משימות להיום</div>
         </div>
       </div>
 
       {/* Spending Analytics */}
-      <div className="bg-slate-800/50 rounded-lg shadow-sm p-6 mb-8 border border-slate-700">
-        <h2 className="text-lg font-semibold text-white mb-6">💰 ניתוח הוצאות</h2>
+      <div className="bg-white/95 rounded-lg shadow-sm p-6 mb-8 border border-gray-200">
+        <h2 className="text-lg font-semibold text-slate-800 mb-6">💰 ניתוח הוצאות</h2>
         <SpendingAnalytics expenses={expenses} monthlyBudget={10000} />
       </div>
 
       {/* Today's Meetings */}
       {todaysMeetings.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-slate-200">
+        <div className="bg-white/95 rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">📋 פגישות היום</h2>
           <div className="space-y-3">
             {todaysMeetings.map((meeting) => (
@@ -94,7 +94,7 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
 
       {/* Today's Tasks */}
       {todaysTasks.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-slate-200">
+        <div className="bg-white/95 rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">✓ משימות להיום</h2>
           <div className="space-y-2">
             {todaysTasks.map((task) => (
@@ -129,7 +129,7 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
 
       {/* Next Meeting */}
       {nextMeeting && (
-        <div className="bg-indigo-50 rounded-lg shadow-sm p-6 mb-6 border border-indigo-200">
+        <div className="bg-white/95 rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">📌 הפגישה הבאה</h2>
           <div className="space-y-2">
             <div>
@@ -148,11 +148,11 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
 
       {/* Clients needing follow-up */}
       {followupClients.length > 0 && (
-        <div className="bg-amber-50 rounded-lg p-4 border border-amber-200 mb-6">
-          <h3 className="font-semibold text-amber-900 mb-2">⚠️ לקוחות דורשים מעקב ({followupClients.length})</h3>
+        <div className="bg-white/95 rounded-lg p-4 border border-gray-200 mb-6">
+          <h3 className="font-semibold text-slate-800 mb-2">⚠️ לקוחות דורשים מעקב ({followupClients.length})</h3>
           <div className="space-y-1">
             {followupClients.slice(0, 3).map((client) => (
-              <div key={client.id} className="text-sm text-amber-800">
+              <div key={client.id} className="text-sm text-slate-700">
                 • {client.name}
               </div>
             ))}
@@ -166,7 +166,7 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
       </div>
 
       {/* AI Assistant Button */}
-      <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition">
+      <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition">
         🤖 שחח עם העוזרת שלי
       </button>
     </div>

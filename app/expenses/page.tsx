@@ -29,16 +29,16 @@ export default function ExpensesPage() {
   const categories = [...new Set(expenses.map(e => e.category))]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="bg-white/95 shadow">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-indigo-600">ניהול הוצאות</h1>
-              <p className="text-gray-600 mt-2">עקוב אחרי כל הוצאותיך</p>
+              <h1 className="text-3xl font-bold text-blue-600">ניהול הוצאות</h1>
+              <p className="text-slate-600 mt-2">עקוב אחרי כל הוצאותיך</p>
             </div>
-            <Link href="/" className="text-indigo-600 hover:text-indigo-700 font-semibold">
+            <Link href="/" className="text-blue-600 hover:text-blue-700 font-semibold">
               ← חזרה לעמוד הבית
             </Link>
           </div>
@@ -49,37 +49,37 @@ export default function ExpensesPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Form */}
           <div className="md:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-bold mb-4">הוסף הוצאה חדשה</h2>
+            <div className="bg-white/95 rounded-lg shadow p-6 border border-gray-200">
+              <h2 className="text-xl font-bold mb-4 text-slate-800">הוסף הוצאה חדשה</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold mb-2">תיאור</label>
+                  <label className="block text-sm font-semibold mb-2 text-slate-700">תיאור</label>
                   <input
                     type="text"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900"
                     placeholder="תיאור ההוצאה"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-2">סכום</label>
+                  <label className="block text-sm font-semibold mb-2 text-slate-700">סכום</label>
                   <input
                     type="number"
                     value={formData.amount}
                     onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900"
                     placeholder="0.00"
                     step="0.01"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-2">קטגוריה</label>
+                  <label className="block text-sm font-semibold mb-2 text-slate-700">קטגוריה</label>
                   <input
                     type="text"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900"
                     placeholder="קטגוריה"
                     list="categories"
                   />
@@ -90,16 +90,16 @@ export default function ExpensesPage() {
                   </datalist>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-2">תאריך</label>
+                  <label className="block text-sm font-semibold mb-2 text-slate-700">תאריך</label>
                   <input
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-2">לקוח (אופציונלי)</label>
+                  <label className="block text-sm font-semibold mb-2 text-slate-700">לקוח (אופציונלי)</label>
                   <select
                     value={formData.clientId}
                     onChange={(e) => {
@@ -110,7 +110,7 @@ export default function ExpensesPage() {
                         clientName: selectedClient?.name || ''
                       })
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-900"
                   >
                     <option value="">-- לא בחרת לקוח --</option>
                     {clients.map((client) => (
@@ -122,7 +122,7 @@ export default function ExpensesPage() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition"
+                  className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
                 >
                   הוסף הוצאה
                 </button>
@@ -134,36 +134,36 @@ export default function ExpensesPage() {
           <div className="md:col-span-2 space-y-6">
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-lg shadow p-6">
-                <p className="text-gray-600 text-sm">סך הוצאות</p>
-                <p className="text-3xl font-bold text-indigo-600">₪{totalExpenses.toFixed(2)}</p>
+              <div className="bg-white/95 rounded-lg shadow p-6 border border-gray-200">
+                <p className="text-slate-600 text-sm">סך הוצאות</p>
+                <p className="text-3xl font-bold text-blue-600">₪{totalExpenses.toFixed(2)}</p>
               </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <p className="text-gray-600 text-sm">מספר הוצאות</p>
-                <p className="text-3xl font-bold text-indigo-600">{expenses.length}</p>
+              <div className="bg-white/95 rounded-lg shadow p-6 border border-gray-200">
+                <p className="text-slate-600 text-sm">מספר הוצאות</p>
+                <p className="text-3xl font-bold text-blue-600">{expenses.length}</p>
               </div>
             </div>
 
             {/* Expenses List */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-6 border-b">
-                <h2 className="text-xl font-bold">רשימת הוצאות</h2>
+            <div className="bg-white/95 rounded-lg shadow overflow-hidden border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <h2 className="text-xl font-bold text-slate-800">רשימת הוצאות</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-gray-100">
                     <tr>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">תיאור</th>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">לקוח</th>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">קטגוריה</th>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">סכום</th>
-                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">תאריך</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-slate-700">תיאור</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-slate-700">לקוח</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-slate-700">קטגוריה</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-slate-700">סכום</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-slate-700">תאריך</th>
                     </tr>
                   </thead>
                   <tbody>
                     {expenses.map((expense) => (
                       <tr key={expense.id} className="border-t hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm">{expense.description}</td>
+                        <td className="px-6 py-4 text-sm text-slate-800">{expense.description}</td>
                         <td className="px-6 py-4 text-sm">
                           {expense.clientName ? (
                             <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
@@ -174,12 +174,12 @@ export default function ExpensesPage() {
                           )}
                         </td>
                         <td className="px-6 py-4 text-sm">
-                          <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
                             {expense.category}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm font-semibold">₪{expense.amount.toFixed(2)}</td>
-                        <td className="px-6 py-4 text-sm text-gray-600">{expense.date}</td>
+                        <td className="px-6 py-4 text-sm font-semibold text-slate-800">₪{expense.amount.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-sm text-slate-600">{expense.date}</td>
                       </tr>
                     ))}
                   </tbody>

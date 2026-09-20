@@ -44,7 +44,7 @@ export default function BudgetAlerts() {
   const status = calculateBudgetStatus()
 
   return (
-    <div className="bg-white/95 rounded-lg shadow p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow p-6 border border-slate-200">
       <h2 className="text-lg font-semibold text-slate-800 mb-4">🎯 הגדרות תקציב</h2>
 
       <div className="space-y-4">

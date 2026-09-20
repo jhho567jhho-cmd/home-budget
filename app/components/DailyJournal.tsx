@@ -57,7 +57,7 @@ export default function DailyJournal() {
   }
 
   return (
-    <div className="bg-white/95 rounded-lg shadow-lg p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-lg p-6 border border-slate-200">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-slate-800">📝 יומן אישי</h2>
         <span className="text-3xl">{moodEmoji[mood]}</span>
@@ -72,7 +72,7 @@ export default function DailyJournal() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="מה בדעתך היום?"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white text-slate-900 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-500 bg-white text-slate-900 placeholder-slate-400"
           />
         </div>
 
@@ -86,8 +86,8 @@ export default function DailyJournal() {
                 onClick={() => setMood(m)}
                 className={`flex-1 py-2 px-3 rounded-lg transition ${
                   mood === m
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-slate-700 hover:bg-gray-200'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 <span className="text-xl">{moodEmoji[m]}</span>
@@ -110,7 +110,7 @@ export default function DailyJournal() {
             onChange={(e) => setContent(e.target.value)}
             placeholder="כתוב כאן את המחשבות והרגשות שלך..."
             rows={6}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 resize-none bg-white text-slate-900 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-500 resize-none bg-white text-slate-900 placeholder-slate-400"
           />
         </div>
 

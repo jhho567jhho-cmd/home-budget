@@ -52,16 +52,16 @@ export default function JournalPage() {
   })
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white/95 shadow">
+      <header className="bg-white shadow">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-blue-600">📝 היומן שלי</h1>
-              <p className="text-slate-600 mt-2">הרשומות האישיות שלך</p>
+              <h1 className="text-3xl font-bold text-indigo-600">📝 היומן שלי</h1>
+              <p className="text-gray-600 mt-2">הרשומות האישיות שלך</p>
             </div>
-            <Link href="/" className="text-blue-600 hover:text-blue-700 font-semibold">
+            <Link href="/" className="text-indigo-600 hover:text-indigo-700 font-semibold">
               ← חזרה לעמוד הבית
             </Link>
           </div>
@@ -70,18 +70,18 @@ export default function JournalPage() {
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Month Navigation */}
-        <div className="bg-white/95 rounded-lg shadow p-6 mb-8 border border-gray-200">
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
           <div className="flex items-center justify-between">
             <button
               onClick={handlePrevMonth}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
             >
               ← חודש קודם
             </button>
             <h2 className="text-2xl font-bold text-slate-800">{monthName}</h2>
             <button
               onClick={handleNextMonth}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
             >
               חודש הבא →
             </button>
@@ -104,7 +104,7 @@ export default function JournalPage() {
                 return (
                   <div
                     key={entry.id}
-                    className="bg-white/95 rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition"
+                    className="bg-white rounded-lg shadow-sm p-6 border border-slate-200 hover:shadow-md transition"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -113,7 +113,7 @@ export default function JournalPage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">{moodEmoji[entry.mood]}</span>
-                        <span className="text-sm text-slate-700 bg-gray-100 px-3 py-1 rounded-full">
+                        <span className="text-sm text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
                           {moodLabel[entry.mood]}
                         </span>
                       </div>
@@ -124,7 +124,7 @@ export default function JournalPage() {
                     <div className="flex gap-3">
                       <Link
                         href={`/journal/${entry.id}`}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm"
                       >
                         ערוך
                       </Link>
@@ -144,7 +144,7 @@ export default function JournalPage() {
               })}
           </div>
         ) : (
-          <div className="bg-white/95 rounded-lg shadow p-12 text-center border border-gray-200">
+          <div className="bg-white rounded-lg shadow p-12 text-center">
             <p className="text-2xl mb-2">📭</p>
             <p className="text-slate-600 text-lg">אין רשומות בחודש זה</p>
             <p className="text-slate-500 mt-2">התחל לכתוב את היומן שלך בעמוד הבית!</p>

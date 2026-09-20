@@ -42,7 +42,7 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
   const { meetings, getUpcomingMeetings } = useMeetings()
   const { tasks } = useTasks()
   const { clients, getClientsByStatus } = useClients()
-  const { expenses } = useExpenses()
+  const { expenses, addExpense, deleteExpense } = useExpenses()
 
   // קבל את האירועים של היום
   const today = new Date().toISOString().split('T')[0]
@@ -107,7 +107,12 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
       {/* Spending Analytics */}
       <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-8">
         <h2 className="text-lg font-semibold text-white mb-6">💰 ניתוח הוצאות</h2>
-        <SpendingAnalytics expenses={expenses} monthlyBudget={10000} />
+        <SpendingAnalytics
+          expenses={expenses}
+          monthlyBudget={10000}
+          onAddExpense={addExpense}
+          onDeleteExpense={deleteExpense}
+        />
       </div>
 
       {/* Today's Meetings */}

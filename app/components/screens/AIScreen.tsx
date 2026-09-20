@@ -105,17 +105,17 @@ export default function AIScreen() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50">
+    <div className="flex flex-col h-screen bg-slate-900">
       {/* Header */}
-      <div className="sticky top-0 bg-white border-b border-slate-200 px-4 py-4 z-10">
+      <div className="sticky top-0 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700 px-4 py-4 z-10 shadow-lg">
         <div className="flex items-center justify-between max-w-2xl mx-auto">
           <button
             onClick={clearMessages}
-            className="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded hover:bg-slate-300"
+            className="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded transition"
           >
             ✕ נקה
           </button>
-          <h1 className="text-2xl font-bold text-slate-800">🤖 העוזרת שלי</h1>
+          <h1 className="text-2xl font-bold text-white">🤖 העוזרת שלי</h1>
           <div></div>
         </div>
       </div>
@@ -127,10 +127,10 @@ export default function AIScreen() {
             {/* Welcome Message */}
             <div className="text-center mb-8">
               <div className="text-6xl mb-4">🧠</div>
-              <h2 className="text-2xl font-bold text-slate-800 mb-2">
-                שלום! אני כאן לעזור לך
+              <h2 className="text-2xl font-bold text-white mb-2">
+                שלום דבורה! אני כאן לעזור לך
               </h2>
-              <p className="text-slate-600">
+              <p className="text-gray-400">
                 בחר פעולה מהירה או כתוב לי משהו
               </p>
             </div>
@@ -142,9 +142,9 @@ export default function AIScreen() {
                   key={action.id}
                   onClick={() => handleQuickAction(action.message)}
                   disabled={isLoading}
-                  className="w-full bg-white border border-slate-300 rounded-lg p-4 text-right hover:bg-indigo-50 transition disabled:opacity-50"
+                  className="w-full bg-gradient-to-br from-blue-600 to-purple-600 border border-blue-500 rounded-lg p-4 text-right text-white hover:opacity-90 transition disabled:opacity-50 font-semibold"
                 >
-                  <div className="font-semibold text-slate-800">
+                  <div>
                     {action.label}
                   </div>
                 </button>
@@ -157,14 +157,14 @@ export default function AIScreen() {
               <div
                 key={index}
                 className={`flex ${
-                  message.role === 'user' ? 'justify-start' : 'justify-end'
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
                 }`}
               >
                 <div
                   className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg text-sm whitespace-pre-wrap ${
                     message.role === 'user'
-                      ? 'bg-indigo-600 text-white rounded-bl-none'
-                      : 'bg-white text-slate-800 rounded-br-none border border-slate-300'
+                      ? 'bg-blue-600 text-white rounded-br-none'
+                      : 'bg-slate-800 text-gray-100 rounded-bl-none border border-slate-700'
                   }`}
                 >
                   {message.content}
@@ -174,16 +174,16 @@ export default function AIScreen() {
 
             {/* Loading indicator */}
             {isLoading && (
-              <div className="flex justify-end">
-                <div className="bg-white border border-slate-300 rounded-lg rounded-br-none px-4 py-3">
+              <div className="flex justify-start">
+                <div className="bg-slate-800 border border-slate-700 rounded-lg rounded-bl-none px-4 py-3">
                   <div className="flex gap-2">
-                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
                       style={{ animationDelay: '0.1s' }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
                       style={{ animationDelay: '0.2s' }}
                     ></div>
                   </div>
@@ -197,7 +197,7 @@ export default function AIScreen() {
       </div>
 
       {/* Input Area */}
-      <div className="sticky bottom-0 bg-white border-t border-slate-200 px-4 py-4">
+      <div className="sticky bottom-0 bg-gradient-to-r from-slate-800 to-slate-900 border-t border-slate-700 px-4 py-4 shadow-lg">
         <div className="max-w-2xl mx-auto">
           {/* Show quick actions if not many messages */}
           {messages.length > 0 && messages.length < 5 && (
@@ -207,7 +207,7 @@ export default function AIScreen() {
                   key={action.id}
                   onClick={() => handleQuickAction(action.message)}
                   disabled={isLoading}
-                  className="text-xs bg-indigo-50 border border-indigo-200 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-100 transition disabled:opacity-50"
+                  className="text-xs bg-slate-700 hover:bg-slate-600 border border-blue-500 text-blue-200 px-2 py-1 rounded transition disabled:opacity-50 font-semibold"
                 >
                   {action.label}
                 </button>
@@ -219,7 +219,7 @@ export default function AIScreen() {
           <form onSubmit={handleSendMessage} className="flex gap-2">
             <button
               type="button"
-              className="bg-slate-200 hover:bg-slate-300 text-slate-700 p-3 rounded-lg transition disabled:opacity-50"
+              className="bg-slate-700 hover:bg-slate-600 text-blue-400 p-3 rounded-lg transition disabled:opacity-50"
               disabled={isLoading}
               title="רשם קול (בקרוב)"
             >
@@ -230,21 +230,21 @@ export default function AIScreen() {
               type="text"
               placeholder="כתוב הודעה..."
               disabled={isLoading}
-              className="flex-1 px-4 py-3 rounded-lg border border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-right disabled:opacity-50"
+              className="flex-1 px-4 py-3 rounded-lg border border-slate-700 bg-slate-800 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 text-right disabled:opacity-50"
               dir="rtl"
             />
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 rounded-lg transition disabled:opacity-50"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 text-white px-4 py-3 rounded-lg transition disabled:opacity-50 font-semibold"
             >
               {isLoading ? '⏳' : '➤'}
             </button>
           </form>
 
           {/* Info message */}
-          <p className="text-xs text-slate-500 mt-2 text-center">
-            ✨ זה עדיין mock. בקרוב אחובר ל-AI אמיתי.
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            ✨ מופעל על ידי Claude AI
           </p>
         </div>
       </div>

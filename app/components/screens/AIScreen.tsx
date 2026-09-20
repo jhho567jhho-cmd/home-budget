@@ -244,7 +244,7 @@ export default function AIScreen() {
 
           {/* Info message */}
           <p className="text-xs text-gray-500 mt-2 text-center">
-            ✨ מופעל על ידי Claude AI
+            ✨ עוזרת חכמה מבוססת הנתונים שלך (אפשר לשדרג ל-AI מלא בהמשך)
           </p>
         </div>
       </div>

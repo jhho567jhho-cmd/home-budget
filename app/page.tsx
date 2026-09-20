@@ -10,6 +10,7 @@ import { NotesProvider } from './context/NotesContext'
 import { ConversationProvider } from './context/ConversationContext'
 import { KnowledgeProvider } from './context/KnowledgeContext'
 import { ExpensesProvider } from './context/ExpensesContext'
+import { JournalProvider } from './context/JournalContext'
 
 export default function Page() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -50,21 +51,23 @@ export default function Page() {
   }
 
   return isLoggedIn ? (
-    <ExpensesProvider>
-      <ClientsProvider>
-        <MeetingsProvider>
-          <TasksProvider>
-            <NotesProvider>
-              <ConversationProvider>
-                <KnowledgeProvider>
-                  <Home userEmail={userEmail} onLogout={handleLogout} />
-                </KnowledgeProvider>
-              </ConversationProvider>
-            </NotesProvider>
-          </TasksProvider>
-        </MeetingsProvider>
-      </ClientsProvider>
-    </ExpensesProvider>
+    <JournalProvider>
+      <ExpensesProvider>
+        <ClientsProvider>
+          <MeetingsProvider>
+            <TasksProvider>
+              <NotesProvider>
+                <ConversationProvider>
+                  <KnowledgeProvider>
+                    <Home userEmail={userEmail} onLogout={handleLogout} />
+                  </KnowledgeProvider>
+                </ConversationProvider>
+              </NotesProvider>
+            </TasksProvider>
+          </MeetingsProvider>
+        </ClientsProvider>
+      </ExpensesProvider>
+    </JournalProvider>
   ) : (
     <Login onLogin={handleLogin} />
   )

@@ -7,6 +7,7 @@ import { useTasks } from '@/app/context/TasksContext'
 import { useClients } from '@/app/context/ClientsContext'
 import { useExpenses } from '@/app/context/ExpensesContext'
 import SpendingAnalytics from '@/app/components/SpendingAnalytics'
+import DailyJournal from '@/app/components/DailyJournal'
 
 interface HomeScreenProps {
   userEmail: string
@@ -158,6 +159,11 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
           </div>
         </div>
       )}
+
+      {/* Daily Journal */}
+      <div className="mb-6">
+        <DailyJournal />
+      </div>
 
       {/* AI Assistant Button */}
       <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition">

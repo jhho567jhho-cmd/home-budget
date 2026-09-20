@@ -1,0 +1,15 @@
+.git
+.gitignore
+.gitkeep
+.vscode
+.idea
+.DS_Store
+.env.example
+README.md
+FEATURES.md
+DATABASE_SCHEMA.md
+CONTRIBUTING.md
+API_DOCS.md
+LICENSE
+node_modules
+.next

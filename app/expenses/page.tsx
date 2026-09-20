@@ -6,7 +6,7 @@ import { useExpenses } from '@/app/context/ExpensesContext'
 import { useClients } from '@/app/context/ClientsContext'
 
 export default function ExpensesPage() {
-  const { expenses, addExpense } = useExpenses()
+  const { expenses, addExpense, deleteExpense } = useExpenses()
   const { clients } = useClients()
   const [formData, setFormData] = useState({ description: '', amount: '', category: '', date: '', clientId: '', clientName: '' })
 
@@ -158,6 +158,7 @@ export default function ExpensesPage() {
                       <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">קטגוריה</th>
                       <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">סכום</th>
                       <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">תאריך</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-200">פעולות</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -180,6 +181,18 @@ export default function ExpensesPage() {
                         </td>
                         <td className="px-6 py-4 text-sm font-semibold text-gray-200">₪{expense.amount.toFixed(2)}</td>
                         <td className="px-6 py-4 text-sm text-gray-400">{expense.date}</td>
+                        <td className="px-6 py-4 text-sm">
+                          <button
+                            onClick={() => {
+                              if (confirm('האם בטוח שאתה רוצה למחוק הוצאה זו?')) {
+                                deleteExpense(expense.id)
+                              }
+                            }}
+                            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-semibold transition"
+                          >
+                            מחק
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

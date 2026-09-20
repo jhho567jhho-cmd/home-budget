@@ -131,7 +131,7 @@ export default function ExpensesPage() {
           </div>
 
           {/* Statistics & List */}
-          <div className="md:col-span-2 space-y-6">
+          <div className="md:col-span-2 space-y-6 min-w-0">
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-lg p-6 text-white">

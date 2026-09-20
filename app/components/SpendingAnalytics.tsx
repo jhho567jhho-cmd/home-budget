@@ -25,10 +25,12 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
 
   // Ensure state updates properly
   const openCard = (cardName: string) => {
+    console.log('Opening card:', cardName)
     setSelectedCard(cardName)
   }
 
   const closeCard = () => {
+    console.log('Closing card')
     setSelectedCard(null)
   }
   const today = new Date()
@@ -155,7 +157,9 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
 
       {/* Modal */}
       {selectedCard && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <>
+          {console.log('Modal should be visible, selectedCard:', selectedCard)}
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 max-h-96 overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-white">
@@ -233,6 +237,7 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
             )}
           </div>
         </div>
+        </>
       )}
 
       {/* Category Breakdown */}

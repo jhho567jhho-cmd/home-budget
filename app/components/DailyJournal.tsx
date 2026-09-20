@@ -57,28 +57,28 @@ export default function DailyJournal() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 border border-slate-200">
+    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-lg p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-slate-800">📝 יומן אישי</h2>
+        <h2 className="text-lg font-semibold text-white">📝 יומן אישי</h2>
         <span className="text-3xl">{moodEmoji[mood]}</span>
       </div>
 
       <div className="space-y-4">
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">כותרת</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">כותרת</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="מה בדעתך היום?"
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-500 bg-white text-slate-900 placeholder-slate-400"
+            className="w-full px-3 py-2 border border-slate-600 rounded-lg focus:outline-none focus:border-blue-400 bg-white text-slate-900 placeholder-slate-400"
           />
         </div>
 
         {/* Mood Selector */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">איך אתה מרגיש היום?</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">איך אתה מרגיש היום?</label>
           <div className="flex gap-2">
             {(['great', 'good', 'okay', 'bad'] as const).map((m) => (
               <button
@@ -86,8 +86,8 @@ export default function DailyJournal() {
                 onClick={() => setMood(m)}
                 className={`flex-1 py-2 px-3 rounded-lg transition ${
                   mood === m
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-slate-700 text-white hover:bg-slate-600'
                 }`}
               >
                 <span className="text-xl">{moodEmoji[m]}</span>
@@ -104,13 +104,13 @@ export default function DailyJournal() {
 
         {/* Content */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">הרשומה שלי</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">הרשומה שלי</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="כתוב כאן את המחשבות והרגשות שלך..."
             rows={6}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-500 resize-none bg-white text-slate-900 placeholder-slate-400"
+            className="w-full px-3 py-2 border border-slate-600 rounded-lg focus:outline-none focus:border-blue-400 resize-none bg-white text-slate-900 placeholder-slate-400"
           />
         </div>
 

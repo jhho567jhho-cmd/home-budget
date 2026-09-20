@@ -44,13 +44,13 @@ export default function BudgetAlerts() {
   const status = calculateBudgetStatus()
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 border border-slate-200">
-      <h2 className="text-lg font-semibold text-slate-800 mb-4">🎯 הגדרות תקציב</h2>
+    <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
+      <h2 className="text-lg font-semibold mb-4">🎯 הגדרות תקציב</h2>
 
       <div className="space-y-4">
         {/* Monthly Limit */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
+          <label className="block text-sm font-medium opacity-90 mb-2">
             תקציב חודשי
           </label>
           <div className="flex items-center gap-2">
@@ -58,15 +58,15 @@ export default function BudgetAlerts() {
               type="number"
               value={budget.monthlyLimit}
               onChange={(e) => setBudget({ ...budget, monthlyLimit: Number(e.target.value) })}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 bg-white"
+              className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-500 bg-white text-slate-900"
             />
-            <span className="text-slate-600">₪</span>
+            <span className="opacity-90">₪</span>
           </div>
         </div>
 
         {/* Alert Threshold */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
+          <label className="block text-sm font-medium opacity-90 mb-2">
             התרעה בעת חריגה ל-{budget.alertThreshold}% (₪{status.alertLevel})
           </label>
           <input
@@ -87,11 +87,11 @@ export default function BudgetAlerts() {
             onChange={(e) => setBudget({ ...budget, isEnabled: e.target.checked })}
             className="w-4 h-4 rounded"
           />
-          <label className="text-sm font-medium text-slate-700">הפעל התרעות</label>
+          <label className="text-sm font-medium opacity-90">הפעל התרעות</label>
         </div>
 
         {/* Info */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700">
+        <div className="bg-blue-900 bg-opacity-50 border border-blue-400 rounded-lg p-3 text-sm text-blue-100">
           <div className="font-semibold mb-1">💡 מידע שימושי:</div>
           <p>כל יום אתה יכול להוציא בערך ₪{Math.round(budget.monthlyLimit / 30)} כדי להישאר בתקציב</p>
         </div>
@@ -102,7 +102,7 @@ export default function BudgetAlerts() {
           className={`w-full font-semibold py-2 rounded-lg transition ${
             isSaved
               ? 'bg-green-500 text-white'
-              : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+              : 'bg-white text-blue-600 hover:bg-gray-100'
           }`}
         >
           {isSaved ? '✅ שמור בהצלחה!' : '💾 שמור הגדרות'}

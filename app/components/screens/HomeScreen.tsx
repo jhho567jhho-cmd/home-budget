@@ -44,40 +44,40 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
         <h1 className="text-3xl font-bold text-white mb-2">
           {greeting}, {userName}! 👋
         </h1>
-        <p className="text-blue-100">{currentDate}</p>
+        <p className="text-gray-400">{currentDate}</p>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="bg-white rounded-lg p-4 text-center border border-slate-200 shadow-sm">
-          <div className="text-3xl font-bold text-blue-600 mb-1">{todaysMeetings.length}</div>
-          <div className="text-sm text-slate-700">פגישות היום</div>
+        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 text-center shadow-lg text-white">
+          <div className="text-3xl font-bold mb-1">{todaysMeetings.length}</div>
+          <div className="text-sm opacity-90">פגישות היום</div>
         </div>
-        <div className="bg-white rounded-lg p-4 text-center border border-slate-200 shadow-sm">
-          <div className="text-3xl font-bold text-green-600 mb-1">
+        <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-4 text-center shadow-lg text-white">
+          <div className="text-3xl font-bold mb-1">
             {todaysTasks.filter((t) => t.status !== 'completed').length}
           </div>
-          <div className="text-sm text-slate-700">משימות להיום</div>
+          <div className="text-sm opacity-90">משימות להיום</div>
         </div>
       </div>
 
       {/* Spending Analytics */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-8 border border-slate-200">
-        <h2 className="text-lg font-semibold text-slate-800 mb-6">💰 ניתוח הוצאות</h2>
+      <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-8">
+        <h2 className="text-lg font-semibold text-white mb-6">💰 ניתוח הוצאות</h2>
         <SpendingAnalytics expenses={expenses} monthlyBudget={10000} />
       </div>
 
       {/* Today's Meetings */}
       {todaysMeetings.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4">📋 פגישות היום</h2>
+        <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-6">
+          <h2 className="text-lg font-semibold text-white mb-4">📋 פגישות היום</h2>
           <div className="space-y-3">
             {todaysMeetings.map((meeting) => (
               <div key={meeting.id} className="border-r-4 border-blue-400 pl-4 py-2">
-                <div className="font-semibold text-slate-800">
+                <div className="font-semibold text-white">
                   {meeting.time} • {meeting.summary.mainTopic}
                 </div>
-                <div className="text-sm text-slate-600 mt-1">
+                <div className="text-sm text-gray-400 mt-1">
                   {meeting.type === 'session'
                     ? '🎯 הפגשה'
                     : meeting.type === 'assessment'
@@ -94,8 +94,8 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
 
       {/* Today's Tasks */}
       {todaysTasks.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4">✓ משימות להיום</h2>
+        <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-6">
+          <h2 className="text-lg font-semibold text-white mb-4">✓ משימות להיום</h2>
           <div className="space-y-2">
             {todaysTasks.map((task) => (
               <div
@@ -111,8 +111,8 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
                   className="w-4 h-4"
                 />
                 <div className="flex-1">
-                  <div className="font-medium text-slate-800">{task.title}</div>
-                  <div className="text-xs text-slate-600">
+                  <div className="font-medium text-white">{task.title}</div>
+                  <div className="text-xs text-gray-400">
                     {task.dueTime && `⏰ ${task.dueTime}`}
                     {task.priority && (
                       <span className="ml-2">
@@ -129,18 +129,18 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
 
       {/* Next Meeting */}
       {nextMeeting && (
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4">📌 הפגישה הבאה</h2>
+        <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl shadow-lg p-6 mb-6 text-white">
+          <h2 className="text-lg font-semibold mb-4">📌 הפגישה הבאה</h2>
           <div className="space-y-2">
             <div>
-              <span className="text-sm text-slate-600">📅 </span>
-              <span className="text-slate-800">
+              <span className="text-sm opacity-90">📅 </span>
+              <span className="opacity-90">
                 {new Date(nextMeeting.date).toLocaleDateString('he-IL')} ב-{nextMeeting.time}
               </span>
             </div>
             <div>
-              <span className="text-sm text-slate-600">📋 </span>
-              <span className="text-slate-800 font-semibold">{nextMeeting.summary.mainTopic}</span>
+              <span className="text-sm opacity-90">📋 </span>
+              <span className="font-semibold">{nextMeeting.summary.mainTopic}</span>
             </div>
           </div>
         </div>
@@ -148,11 +148,11 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
 
       {/* Clients needing follow-up */}
       {followupClients.length > 0 && (
-        <div className="bg-white rounded-lg p-4 border border-slate-200 shadow-sm mb-6">
-          <h3 className="font-semibold text-slate-800 mb-2">⚠️ לקוחות דורשים מעקב ({followupClients.length})</h3>
+        <div className="bg-slate-800 rounded-2xl p-4 shadow-lg mb-6">
+          <h3 className="font-semibold text-white mb-2">⚠️ לקוחות דורשים מעקב ({followupClients.length})</h3>
           <div className="space-y-1">
             {followupClients.slice(0, 3).map((client) => (
-              <div key={client.id} className="text-sm text-slate-700">
+              <div key={client.id} className="text-sm text-gray-300">
                 • {client.name}
               </div>
             ))}

@@ -52,16 +52,16 @@ export default function JournalPage() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-900">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="bg-gradient-to-r from-slate-800 to-slate-900 shadow-lg border-b border-slate-700">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-indigo-600">📝 היומן שלי</h1>
-              <p className="text-gray-600 mt-2">הרשומות האישיות שלך</p>
+              <h1 className="text-3xl font-bold text-white">📝 היומן שלי</h1>
+              <p className="text-gray-400 mt-2">הרשומות האישיות שלך</p>
             </div>
-            <Link href="/" className="text-indigo-600 hover:text-indigo-700 font-semibold">
+            <Link href="/" className="text-blue-400 hover:text-blue-300 font-semibold">
               ← חזרה לעמוד הבית
             </Link>
           </div>
@@ -70,18 +70,18 @@ export default function JournalPage() {
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Month Navigation */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
+        <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between">
             <button
               onClick={handlePrevMonth}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               ← חודש קודם
             </button>
-            <h2 className="text-2xl font-bold text-slate-800">{monthName}</h2>
+            <h2 className="text-2xl font-bold text-white">{monthName}</h2>
             <button
               onClick={handleNextMonth}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               חודש הבא →
             </button>
@@ -104,27 +104,27 @@ export default function JournalPage() {
                 return (
                   <div
                     key={entry.id}
-                    className="bg-white rounded-lg shadow-sm p-6 border border-slate-200 hover:shadow-md transition"
+                    className="bg-slate-800 rounded-2xl shadow-lg p-6 border border-slate-700 hover:shadow-xl transition"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="text-xl font-semibold text-slate-800">{entry.title}</h3>
-                        <p className="text-sm text-slate-600 mt-1">{entryDate}</p>
+                        <h3 className="text-xl font-semibold text-white">{entry.title}</h3>
+                        <p className="text-sm text-gray-400 mt-1">{entryDate}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">{moodEmoji[entry.mood]}</span>
-                        <span className="text-sm text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                        <span className="text-sm text-blue-200 bg-blue-900 bg-opacity-50 px-3 py-1 rounded-full">
                           {moodLabel[entry.mood]}
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-slate-700 whitespace-pre-wrap mb-4">{entry.content}</p>
+                    <p className="text-gray-300 whitespace-pre-wrap mb-4">{entry.content}</p>
 
                     <div className="flex gap-3">
                       <Link
                         href={`/journal/${entry.id}`}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
                       >
                         ערוך
                       </Link>
@@ -144,10 +144,10 @@ export default function JournalPage() {
               })}
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
+          <div className="bg-slate-800 rounded-2xl shadow-lg p-12 text-center">
             <p className="text-2xl mb-2">📭</p>
-            <p className="text-slate-600 text-lg">אין רשומות בחודש זה</p>
-            <p className="text-slate-500 mt-2">התחל לכתוב את היומן שלך בעמוד הבית!</p>
+            <p className="text-gray-300 text-lg">אין רשומות בחודש זה</p>
+            <p className="text-gray-400 mt-2">התחל לכתוב את היומן שלך בעמוד הבית!</p>
           </div>
         )}
       </main>

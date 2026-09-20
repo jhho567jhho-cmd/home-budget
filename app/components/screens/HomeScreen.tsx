@@ -5,6 +5,8 @@ import { getCurrentDate, getGreeting } from '@/app/utils/dateUtils'
 import { useMeetings } from '@/app/context/MeetingsContext'
 import { useTasks } from '@/app/context/TasksContext'
 import { useClients } from '@/app/context/ClientsContext'
+import { useExpenses } from '@/app/context/ExpensesContext'
+import SpendingAnalytics from '@/app/components/SpendingAnalytics'
 
 interface HomeScreenProps {
   userEmail: string
@@ -18,6 +20,7 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
   const { meetings, getUpcomingMeetings } = useMeetings()
   const { tasks } = useTasks()
   const { clients, getClientsByStatus } = useClients()
+  const { expenses } = useExpenses()
 
   // קבל את האירועים של היום
   const today = new Date().toISOString().split('T')[0]
@@ -55,6 +58,12 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
           </div>
           <div className="text-sm text-slate-600">משימות להיום</div>
         </div>
+      </div>
+
+      {/* Spending Analytics */}
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-8 border border-slate-200">
+        <h2 className="text-lg font-semibold text-slate-800 mb-6">💰 ניתוח הוצאות</h2>
+        <SpendingAnalytics expenses={expenses} monthlyBudget={10000} />
       </div>
 
       {/* Today's Meetings */}

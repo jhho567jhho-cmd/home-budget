@@ -2,36 +2,21 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-
-interface Expense {
-  id: number
-  description: string
-  amount: number
-  category: string
-  date: string
-}
+import { useExpenses } from '@/app/context/ExpensesContext'
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<Expense[]>([
-    { id: 1, description: 'קניות במכולת', amount: 150, category: 'קניות', date: '2026-09-17' },
-    { id: 2, description: 'חשמל', amount: 200, category: 'שירותים', date: '2026-09-15' },
-  ])
-
+  const { expenses, addExpense } = useExpenses()
   const [formData, setFormData] = useState({ description: '', amount: '', category: '', date: '' })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (formData.description && formData.amount && formData.category && formData.date) {
-      setExpenses([
-        ...expenses,
-        {
-          id: expenses.length + 1,
-          description: formData.description,
-          amount: parseFloat(formData.amount),
-          category: formData.category,
-          date: formData.date,
-        },
-      ])
+      addExpense({
+        description: formData.description,
+        amount: parseFloat(formData.amount),
+        category: formData.category,
+        date: formData.date,
+      })
       setFormData({ description: '', amount: '', category: '', date: '' })
     }
   }

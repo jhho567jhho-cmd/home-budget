@@ -8,8 +8,8 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'NLP Coach - עוזרת מקצועית',
-  description: 'אפליקציה פרטית למאמנת/מטפלת NLP',
+  title: 'Budget Buddy - מנהל תקציב',
+  description: 'אפליקציה פרטית לניהול תקציב ביתי',
 }
 
 export default function RootLayout({

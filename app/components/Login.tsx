@@ -40,9 +40,9 @@ export default function Login({ onLogin }: LoginProps) {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="text-5xl mb-4">🧠</div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">NLP Coach</h1>
-          <p className="text-slate-600">עוזרת מקצועית לניהול פגישות</p>
+          <div className="text-5xl mb-4">💰</div>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">Budget Buddy</h1>
+          <p className="text-slate-600">אפליקציה פרטית לניהול תקציב ביתי</p>
         </div>
 
         {/* Form */}
@@ -104,8 +104,8 @@ export default function Login({ onLogin }: LoginProps) {
 
           {/* Help text */}
           <div className="text-center text-sm text-slate-600 space-y-2">
-            <p>זו אפליקציה פרטית עבור משתמשת אחת בלבד</p>
-            <p className="text-xs text-slate-500">כרגע: משתמש כל אימייל וסיסמה (הרשמה אוטומטית)</p>
+            <p>אפליקציה פרטית לניהול תקציב ביתי</p>
+            <p className="text-xs text-slate-500">היכנסו עם כל אימייל וסיסמה (הרשמה אוטומטית)</p>
           </div>
         </form>
       </div>

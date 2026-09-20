@@ -35,7 +35,7 @@ const calculateMonthlyStats = (meetings: any[], tasks: any[], clients: any[]) =>
 }
 
 export default function HomeScreen({ userEmail }: HomeScreenProps) {
-  const [userName] = useState('דנה')
+  const [userName] = useState('דבורה')
   const currentDate = getCurrentDate()
   const greeting = getGreeting()
 

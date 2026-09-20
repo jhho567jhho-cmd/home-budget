@@ -41,29 +41,29 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
     <div className="px-4 pt-6 pb-6 max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">
+        <h1 className="text-3xl font-bold text-white mb-2">
           {greeting}, {userName}! 👋
         </h1>
-        <p className="text-slate-600">{currentDate}</p>
+        <p className="text-blue-200">{currentDate}</p>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200">
-          <div className="text-3xl font-bold text-blue-600 mb-1">{todaysMeetings.length}</div>
-          <div className="text-sm text-slate-600">פגישות היום</div>
+        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-4 text-center border border-blue-400">
+          <div className="text-3xl font-bold text-white mb-1">{todaysMeetings.length}</div>
+          <div className="text-sm text-blue-100">פגישות היום</div>
         </div>
-        <div className="bg-green-50 rounded-lg p-4 text-center border border-green-200">
-          <div className="text-3xl font-bold text-green-600 mb-1">
+        <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg p-4 text-center border border-green-400">
+          <div className="text-3xl font-bold text-white mb-1">
             {todaysTasks.filter((t) => t.status !== 'completed').length}
           </div>
-          <div className="text-sm text-slate-600">משימות להיום</div>
+          <div className="text-sm text-green-100">משימות להיום</div>
         </div>
       </div>
 
       {/* Spending Analytics */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-8 border border-slate-200">
-        <h2 className="text-lg font-semibold text-slate-800 mb-6">💰 ניתוח הוצאות</h2>
+      <div className="bg-slate-800/50 rounded-lg shadow-sm p-6 mb-8 border border-slate-700">
+        <h2 className="text-lg font-semibold text-white mb-6">💰 ניתוח הוצאות</h2>
         <SpendingAnalytics expenses={expenses} monthlyBudget={10000} />
       </div>
 

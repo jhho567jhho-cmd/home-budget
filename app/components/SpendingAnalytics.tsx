@@ -71,53 +71,49 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
     <div className="space-y-6">
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
-          <p className="text-sm text-blue-600 font-medium">הוצאות חודש זה</p>
-          <p className="text-3xl font-bold text-blue-700 mt-2">₪{totalSpent.toFixed(2)}</p>
-          <p className="text-xs text-blue-600 mt-2">מתוך תקציב של ₪{monthlyBudget.toFixed(2)}</p>
+        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-6 border border-blue-400">
+          <p className="text-sm text-blue-100 font-medium">הוצאות חודש זה</p>
+          <p className="text-3xl font-bold text-white mt-2">₪{totalSpent.toFixed(2)}</p>
+          <p className="text-xs text-blue-200 mt-2">מתוך תקציב של ₪{monthlyBudget.toFixed(2)}</p>
         </div>
 
         <div
           className={`${
             spendingTrend === 'over'
-              ? 'from-red-50 to-red-100 border-red-200'
-              : 'from-green-50 to-green-100 border-green-200'
+              ? 'from-red-600 to-red-700 border-red-400'
+              : 'from-green-600 to-green-700 border-green-400'
           } bg-gradient-to-br rounded-lg p-6 border`}
         >
-          <p className="text-sm font-medium text-slate-600">
+          <p className="text-sm font-medium text-white">
             {spendingTrend === 'over' ? '⚠️ הוצאות גבוהות מהצפי' : '✅ הוצאות בשליטה'}
           </p>
-          <p
-            className={`text-3xl font-bold mt-2 ${
-              spendingTrend === 'over' ? 'text-red-700' : 'text-green-700'
-            }`}
-          >
+          <p className="text-3xl font-bold mt-2 text-white">
             {spendingTrend === 'over' ? '+' : ''}
             {trendPercentage}%
           </p>
-          <p className="text-xs text-slate-600 mt-2">
+          <p className="text-xs text-white/80 mt-2">
             {spendingTrend === 'over'
               ? `יותר מהתקציב היומי של ₪${expectedDailySpend.toFixed(2)}`
               : `פחות מהתקציב היומי של ₪${expectedDailySpend.toFixed(2)}`}
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
-          <p className="text-sm text-purple-600 font-medium">התחזוקה לשאר החודש</p>
-          <p className={`text-3xl font-bold mt-2 ${remainingBudget >= 0 ? 'text-purple-700' : 'text-red-700'}`}>
+        <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg p-6 border border-purple-400">
+          <p className="text-sm text-purple-100 font-medium">התחזוקה לשאר החודש</p>
+          <p className="text-3xl font-bold mt-2 text-white">
             ₪{remainingBudget.toFixed(2)}
           </p>
-          <p className="text-xs text-purple-600 mt-2">
+          <p className="text-xs text-purple-200 mt-2">
             {remainingBudget >= 0
               ? `יום זה ${dayOfMonth}/${daysInMonth}`
               : 'חרגת מהתקציב!'}
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-6 border border-amber-200">
-          <p className="text-sm text-amber-600 font-medium">התחזוקה משוערת</p>
-          <p className="text-3xl font-bold text-amber-700 mt-2">₪{projectedMonthlySpend.toFixed(2)}</p>
-          <p className="text-xs text-amber-600 mt-2">
+        <div className="bg-gradient-to-br from-orange-600 to-orange-700 rounded-lg p-6 border border-orange-400">
+          <p className="text-sm text-orange-100 font-medium">התחזוקה משוערת</p>
+          <p className="text-3xl font-bold text-white mt-2">₪{projectedMonthlySpend.toFixed(2)}</p>
+          <p className="text-xs text-orange-200 mt-2">
             {projectedMonthlySpend > monthlyBudget
               ? `₪${(projectedMonthlySpend - monthlyBudget).toFixed(2)} מעל התקציב`
               : `₪${(monthlyBudget - projectedMonthlySpend).toFixed(2)} בתוך התקציב`}
@@ -127,20 +123,20 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
 
       {/* Category Breakdown */}
       {categoryBreakdown.length > 0 && (
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-200">
-          <h3 className="text-lg font-semibold text-slate-800 mb-4">📊 חלוקה לפי קטגוריה</h3>
+        <div className="bg-slate-800/50 rounded-lg shadow-sm p-6 border border-slate-700">
+          <h3 className="text-lg font-semibold text-white mb-4">📊 חלוקה לפי קטגוריה</h3>
           <div className="space-y-3">
             {categoryBreakdown.map((item) => (
               <div key={item.category}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-slate-700">{item.category}</span>
-                  <span className="text-sm font-semibold text-slate-800">
+                  <span className="text-sm font-medium text-white">{item.category}</span>
+                  <span className="text-sm font-semibold text-white">
                     ₪{item.amount.toFixed(2)} ({Math.round(item.percentage)}%)
                   </span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="w-full bg-slate-600 rounded-full h-2">
                   <div
-                    className="bg-indigo-500 h-2 rounded-full transition-all"
+                    className="bg-blue-400 h-2 rounded-full transition-all"
                     style={{ width: `${item.percentage}%` }}
                   ></div>
                 </div>
@@ -151,9 +147,9 @@ export default function SpendingAnalytics({ expenses = [], monthlyBudget = 10000
       )}
 
       {/* Spending Insights */}
-      <div className="bg-indigo-50 rounded-lg p-6 border border-indigo-200">
-        <h3 className="text-lg font-semibold text-indigo-900 mb-4">💡 תובנות הוצאה</h3>
-        <ul className="space-y-2 text-sm text-indigo-800">
+      <div className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-lg p-6 border border-blue-500">
+        <h3 className="text-lg font-semibold text-white mb-4">💡 תובנות הוצאה</h3>
+        <ul className="space-y-2 text-sm text-blue-100">
           <li>
             • <strong>ממוצע יומי:</strong> ₪{actualDailyAverage.toFixed(2)} (תקציב: ₪{expectedDailySpend.toFixed(2)})
           </li>

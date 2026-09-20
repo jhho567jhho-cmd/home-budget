@@ -10,6 +10,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Budget Buddy - מנהל תקציב',
   description: 'אפליקציה פרטית לניהול תקציב ביתי',
+  // Trigger fresh Vercel deployment for budget-buddy-il domain
 }
 
 export default function RootLayout({

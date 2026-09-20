@@ -49,7 +49,7 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50">
+    <div className="h-screen flex flex-col bg-slate-900">
       {/* Main content */}
       <div className="flex-1 overflow-y-auto pb-20">
         {renderScreen()}

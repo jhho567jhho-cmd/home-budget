@@ -1,222 +1,94 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { getCurrentDate, getGreeting } from '@/app/utils/dateUtils'
-import { useMeetings } from '@/app/context/MeetingsContext'
-import { useTasks } from '@/app/context/TasksContext'
-import { useClients } from '@/app/context/ClientsContext'
-import { useExpenses } from '@/app/context/ExpensesContext'
-import SpendingAnalytics from '@/app/components/SpendingAnalytics'
-import DailyJournal from '@/app/components/DailyJournal'
+import { useProfile } from '../../contexts/ProfileContext'
+import { useMeals } from '../../contexts/MealsContext'
+import { useHabits } from '../../contexts/HabitsContext'
+import TodayProgress from '../common/TodayProgress'
+import MealCard from '../common/MealCard'
+import HabitCheckBox from '../common/HabitCheckBox'
+import QuickAIButton from '../common/QuickAIButton'
 
-interface HomeScreenProps {
-  userEmail: string
-}
+export default function HomeScreen() {
+  const { profile } = useProfile()
+  const { meals } = useMeals()
+  const { habits, toggleHabit, getCompletionPercentage } = useHabits()
 
-// Enhanced analytics utilities
-const calculateMonthlyStats = (meetings: any[], tasks: any[], clients: any[]) => {
-  const today = new Date()
-  const currentMonth = today.getMonth()
-  const currentYear = today.getFullYear()
+  const completionPercentage = getCompletionPercentage()
 
-  const monthlyMeetings = meetings.filter((m) => {
-    const meetingDate = new Date(m.date)
-    return meetingDate.getMonth() === currentMonth && meetingDate.getFullYear() === currentYear
-  }).length
-
-  const monthlyTasks = tasks.filter((t) => {
-    const taskDate = new Date(t.dueDate)
-    return taskDate.getMonth() === currentMonth && taskDate.getFullYear() === currentYear
-  }).length
-
-  const completedTasks = tasks.filter((t) => t.status === 'completed').length
-
-  return { monthlyMeetings, monthlyTasks, completedTasks }
-}
-
-export default function HomeScreen({ userEmail }: HomeScreenProps) {
-  const [userName] = useState('דבורה')
-  const currentDate = getCurrentDate()
-  const greeting = getGreeting()
-
-  const { meetings, getUpcomingMeetings } = useMeetings()
-  const { tasks } = useTasks()
-  const { clients, getClientsByStatus } = useClients()
-  const { expenses, addExpense, deleteExpense } = useExpenses()
-
-  // קבל את האירועים של היום
-  const today = new Date().toISOString().split('T')[0]
-  const todaysMeetings = useMemo(
-    () => meetings.filter((m) => m.date === today),
-    [meetings]
-  )
-  const todaysTasks = useMemo(() => tasks.filter((t) => t.dueDate === today), [tasks])
-
-  // קבל את הפגישה הבאה
-  const nextMeeting = useMemo(() => getUpcomingMeetings()[0], [getUpcomingMeetings])
-
-  // לקוחות דורשים מעקב
-  const followupClients = useMemo(() => getClientsByStatus('followup'), [getClientsByStatus])
-
-  // Calculate enhanced stats
-  const stats = useMemo(() => calculateMonthlyStats(meetings, tasks, clients), [meetings, tasks, clients])
-
-  // Export functionality
-  const handleExportData = () => {
-    const data = {
-      meetings,
-      tasks,
-      clients,
-      exportDate: new Date().toISOString(),
-      userEmail,
-    }
-    const jsonString = JSON.stringify(data, null, 2)
-    const element = document.createElement('a')
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonString))
-    element.setAttribute('download', `budget-buddy-backup-${new Date().toISOString().split('T')[0]}.json`)
-    element.style.display = 'none'
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'בוקר טוב 🌅'
+    if (hour < 18) return 'אחר הצהריים טוב 🌤️'
+    return 'ערב טוב 🌙'
   }
 
   return (
-    <div className="px-4 pt-6 pb-6 max-w-2xl mx-auto">
-      {/* Header */}
+    <div className="w-full max-w-2xl mx-auto px-4 py-6 animate-fadeIn">
+      {/* כותרת ובדיקת שלום */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          {greeting}, {userName}! 👋
-        </h1>
-        <p className="text-gray-400">{currentDate}</p>
+        <h1 className="text-3xl font-bold mb-2">{getGreeting()}</h1>
+        <p className="text-slate-400">שלום, {profile?.name}! 👋</p>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 text-center shadow-lg text-white">
-          <div className="text-3xl font-bold mb-1">{todaysMeetings.length}</div>
-          <div className="text-sm opacity-90">פגישות היום</div>
-        </div>
-        <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-4 text-center shadow-lg text-white">
-          <div className="text-3xl font-bold mb-1">
-            {todaysTasks.filter((t) => t.status !== 'completed').length}
-          </div>
-          <div className="text-sm opacity-90">משימות להיום</div>
-        </div>
+      {/* התקדמות היום */}
+      <div className="mb-8">
+        <TodayProgress percentage={completionPercentage} />
       </div>
 
-      {/* Spending Analytics */}
-      <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-6">💰 ניתוח הוצאות</h2>
-        <SpendingAnalytics
-          expenses={expenses}
-          monthlyBudget={10000}
-          onAddExpense={addExpense}
-          onDeleteExpense={deleteExpense}
-        />
-      </div>
-
-      {/* Today's Meetings */}
-      {todaysMeetings.length > 0 && (
-        <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold text-white mb-4">📋 פגישות היום</h2>
-          <div className="space-y-3">
-            {todaysMeetings.map((meeting) => (
-              <div key={meeting.id} className="border-r-4 border-blue-400 pl-4 py-2">
-                <div className="font-semibold text-white">
-                  {meeting.time} • {meeting.summary.mainTopic}
-                </div>
-                <div className="text-sm text-gray-400 mt-1">
-                  {meeting.type === 'session'
-                    ? '🎯 הפגשה'
-                    : meeting.type === 'assessment'
-                    ? '📊 הערכה'
-                    : meeting.type === 'followup'
-                    ? '🔄 מעקב'
-                    : '💼 ייעוץ'}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Today's Tasks */}
-      {todaysTasks.length > 0 && (
-        <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold text-white mb-4">✓ משימות להיום</h2>
-          <div className="space-y-2">
-            {todaysTasks.map((task) => (
-              <div
-                key={task.id}
-                className={`flex items-center gap-3 py-2 ${
-                  task.status === 'completed' ? 'opacity-60' : ''
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={task.status === 'completed'}
-                  readOnly
-                  className="w-4 h-4"
-                />
-                <div className="flex-1">
-                  <div className="font-medium text-white">{task.title}</div>
-                  <div className="text-xs text-gray-400">
-                    {task.dueTime && `⏰ ${task.dueTime}`}
-                    {task.priority && (
-                      <span className="ml-2">
-                        {task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢'}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Next Meeting */}
-      {nextMeeting && (
-        <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl shadow-lg p-6 mb-6 text-white">
-          <h2 className="text-lg font-semibold mb-4">📌 הפגישה הבאה</h2>
-          <div className="space-y-2">
-            <div>
-              <span className="text-sm opacity-90">📅 </span>
-              <span className="opacity-90">
-                {new Date(nextMeeting.date).toLocaleDateString('he-IL')} ב-{nextMeeting.time}
-              </span>
+      {/* ארוחות היום */}
+      <div className="mb-8">
+        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+          <span>🍽️</span>
+          <span>ארוחות היום</span>
+        </h2>
+        <div className="space-y-3">
+          {meals && meals.meals.length > 0 ? (
+            meals.meals.map(meal => (
+              <MealCard key={meal.id} meal={meal} />
+            ))
+          ) : (
+            <div className="card text-center text-slate-400 py-6">
+              <p>אין ארוחות תוכננו עדיין</p>
+              <p className="text-sm mt-2">📌 עבור לכרטיסייה "ארוחות" כדי להוסיף</p>
             </div>
-            <div>
-              <span className="text-sm opacity-90">📋 </span>
-              <span className="font-semibold">{nextMeeting.summary.mainTopic}</span>
+          )}
+        </div>
+      </div>
+
+      {/* הרגלים היום */}
+      <div className="mb-8">
+        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+          <span>🔥</span>
+          <span>הרגלים היום</span>
+        </h2>
+        <div className="space-y-3">
+          {habits && habits.habits.length > 0 ? (
+            habits.habits.map(habit => (
+              <HabitCheckBox
+                key={habit.id}
+                habit={habit}
+                onToggle={() => toggleHabit(habit.id)}
+              />
+            ))
+          ) : (
+            <div className="card text-center text-slate-400 py-6">
+              <p>אין הרגלים עדיין</p>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Clients needing follow-up */}
-      {followupClients.length > 0 && (
-        <div className="bg-slate-800 rounded-2xl p-4 shadow-lg mb-6">
-          <h3 className="font-semibold text-white mb-2">⚠️ לקוחות דורשים מעקב ({followupClients.length})</h3>
-          <div className="space-y-1">
-            {followupClients.slice(0, 3).map((client) => (
-              <div key={client.id} className="text-sm text-gray-300">
-                • {client.name}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Daily Journal */}
+      {/* כפתור AI */}
       <div className="mb-6">
-        <DailyJournal />
+        <QuickAIButton />
       </div>
 
-      {/* AI Assistant Button */}
-      <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition">
-        🤖 שחח עם העוזרת שלי
-      </button>
+      {/* מידע יומי */}
+      <div className="card text-sm">
+        <p className="text-slate-300">
+          ✨ <strong>טיפ היום:</strong> השלימו את כל ההרגלים כדי לקבל נקודות בונוס!
+        </p>
+      </div>
     </div>
   )
 }

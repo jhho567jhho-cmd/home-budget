@@ -1,74 +1,44 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Login from './components/Login'
-import Home from './pages/home'
-import { ClientsProvider } from './context/ClientsContext'
-import { MeetingsProvider } from './context/MeetingsContext'
-import { TasksProvider } from './context/TasksContext'
-import { NotesProvider } from './context/NotesContext'
-import { ConversationProvider } from './context/ConversationContext'
-import { KnowledgeProvider } from './context/KnowledgeContext'
-import { ExpensesProvider } from './context/ExpensesContext'
-import { JournalProvider } from './context/JournalContext'
+import { useState } from 'react'
+import BottomNav from './components/common/BottomNav'
+import HomeScreen from './components/screens/HomeScreen'
+import MealsScreen from './components/screens/MealsScreen'
+import HabitsScreen from './components/screens/HabitsScreen'
+import StatsScreen from './components/screens/StatsScreen'
+import AIAssistantScreen from './components/screens/AIAssistantScreen'
+import ProfileScreen from './components/screens/ProfileScreen'
 
-export default function Page() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userEmail, setUserEmail] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+export type TabType = 'home' | 'meals' | 'habits' | 'stats' | 'ai' | 'profile'
 
-  // בדוק אם יש משתמש שמור
-  useEffect(() => {
-    const savedEmail = localStorage.getItem('userEmail')
-    if (savedEmail) {
-      setUserEmail(savedEmail)
-      setIsLoggedIn(true)
+export default function Home() {
+  const [activeTab, setActiveTab] = useState<TabType>('home')
+
+  const renderScreen = () => {
+    switch (activeTab) {
+      case 'home':
+        return <HomeScreen />
+      case 'meals':
+        return <MealsScreen />
+      case 'habits':
+        return <HabitsScreen />
+      case 'stats':
+        return <StatsScreen />
+      case 'ai':
+        return <AIAssistantScreen />
+      case 'profile':
+        return <ProfileScreen />
+      default:
+        return <HomeScreen />
     }
-    setIsLoading(false)
-  }, [])
-
-  const handleLogin = (email: string) => {
-    setUserEmail(email)
-    setIsLoggedIn(true)
-    localStorage.setItem('userEmail', email)
   }
 
-  const handleLogout = () => {
-    setUserEmail('')
-    setIsLoggedIn(false)
-    localStorage.removeItem('userEmail')
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="text-center">
-          <div className="text-5xl mb-4 animate-bounce">🧠</div>
-          <p className="text-slate-600">טוען...</p>
-        </div>
+  return (
+    <div className="container-main">
+      <div className="content-area">
+        {renderScreen()}
       </div>
-    )
-  }
-
-  return isLoggedIn ? (
-    <JournalProvider>
-      <ExpensesProvider>
-        <ClientsProvider>
-          <MeetingsProvider>
-            <TasksProvider>
-              <NotesProvider>
-                <ConversationProvider>
-                  <KnowledgeProvider>
-                    <Home userEmail={userEmail} onLogout={handleLogout} />
-                  </KnowledgeProvider>
-                </ConversationProvider>
-              </NotesProvider>
-            </TasksProvider>
-          </MeetingsProvider>
-        </ClientsProvider>
-      </ExpensesProvider>
-    </JournalProvider>
-  ) : (
-    <Login onLogin={handleLogin} />
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+    </div>
   )
 }

@@ -1,16 +1,13 @@
-import type { Metadata, Viewport } from 'next'
-import './globals.css'
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-}
+import type { Metadata } from 'next'
+import './styles/globals.css'
+import { MealsProvider } from './contexts/MealsContext'
+import { HabitsProvider } from './contexts/HabitsContext'
+import { ProfileProvider } from './contexts/ProfileContext'
+import { ConversationProvider } from './contexts/ConversationContext'
 
 export const metadata: Metadata = {
-  title: 'Budget Buddy - מנהל תקציב',
-  description: 'אפליקציה פרטית לניהול תקציב ביתי',
-  // Trigger fresh Vercel deployment for budget-buddy-il domain
+  title: 'LifeBalance - ניהול יום ויום',
+  description: 'אפליקציה לתכנון ארוחות ומעקב הרגלים עם עוזר AI',
 }
 
 export default function RootLayout({
@@ -20,11 +17,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="he" dir="rtl">
-      <head>
-        <meta charSet="utf-8" />
-      </head>
-      <body className="bg-slate-900 text-white min-h-screen">
-        {children}
+      <body className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+        <ProfileProvider>
+          <ConversationProvider>
+            <MealsProvider>
+              <HabitsProvider>
+                {children}
+              </HabitsProvider>
+            </MealsProvider>
+          </ConversationProvider>
+        </ProfileProvider>
       </body>
     </html>
   )

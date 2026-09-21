@@ -205,8 +205,7 @@ export function HabitsProvider({ children }: { children: React.ReactNode }) {
       if (useSupabase) {
         await updateSupabaseHabit(habitId, {
           completed: newCompleted,
-          streak: newStreak,
-          last_completed_date: newCompleted ? new Date().toISOString().split('T')[0] : null
+          streak: newStreak
         })
       }
 

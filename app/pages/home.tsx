@@ -9,6 +9,10 @@ import CalendarScreen from '../components/screens/CalendarScreen'
 import AIScreen from '../components/screens/AIScreen'
 import KnowledgeBaseScreen from '../components/screens/KnowledgeBaseScreen'
 import MoreScreen from '../components/screens/MoreScreen'
+import SettingsScreen from '../components/screens/SettingsScreen'
+import AnalyticsScreen from '../components/screens/AnalyticsScreen'
+
+type MoreSubTab = 'main' | 'settings' | 'analytics'
 
 interface HomeProps {
   userEmail: string
@@ -18,6 +22,22 @@ interface HomeProps {
 export default function Home({ userEmail, onLogout }: HomeProps) {
   const [activeTab, setActiveTab] = useState<TabType>('home')
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
+  const [moreSubTab, setMoreSubTab] = useState<MoreSubTab>('main')
+
+  const handleMoreNavigation = (subTab: string) => {
+    if (subTab === 'settings' || subTab === 'analytics') {
+      setMoreSubTab(subTab as MoreSubTab)
+    } else {
+      setActiveTab(subTab as TabType)
+    }
+  }
+
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab)
+    if (tab === 'more') {
+      setMoreSubTab('main')
+    }
+  }
 
   const renderScreen = () => {
     // אם בחרנו לקוח, הצג את מסך הפרטים
@@ -42,7 +62,13 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
       case 'knowledge':
         return <KnowledgeBaseScreen userEmail={userEmail} />
       case 'more':
-        return <MoreScreen onLogout={onLogout} onNavigate={setActiveTab} />
+        if (moreSubTab === 'settings') {
+          return <SettingsScreen onBack={() => setMoreSubTab('main')} />
+        }
+        if (moreSubTab === 'analytics') {
+          return <AnalyticsScreen onBack={() => setMoreSubTab('main')} />
+        }
+        return <MoreScreen onLogout={onLogout} onNavigate={handleMoreNavigation} />
       default:
         return <HomeScreen userEmail={userEmail} />
     }
@@ -56,7 +82,7 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
       </div>
 
       {/* Bottom Navigation - לא מוצג כשמצפים מסך לקוח */}
-      {!selectedClientId && <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />}
+      {!selectedClientId && <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />}
     </div>
   )
 }

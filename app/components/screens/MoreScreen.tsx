@@ -1,10 +1,8 @@
 'use client'
 
-import { type TabType } from '../BottomNav'
-
 interface MoreScreenProps {
   onLogout: () => void
-  onNavigate?: (tab: TabType) => void
+  onNavigate?: (tab: string) => void
 }
 
 export default function MoreScreen({ onLogout, onNavigate }: MoreScreenProps) {
@@ -28,11 +26,26 @@ export default function MoreScreen({ onLogout, onNavigate }: MoreScreenProps) {
         </button>
 
         {/* Settings */}
-        <button className="w-full bg-white border border-slate-200 rounded-lg p-4 text-right hover:bg-slate-50 transition flex items-center justify-between">
+        <button
+          onClick={() => onNavigate?.('settings')}
+          className="w-full bg-white border border-slate-200 rounded-lg p-4 text-right hover:bg-slate-50 transition flex items-center justify-between"
+        >
           <span className="text-2xl">⚙️</span>
           <div>
             <div className="font-semibold text-slate-800">הגדרות</div>
             <div className="text-sm text-slate-600">התאם את ההעדפות שלך</div>
+          </div>
+        </button>
+
+        {/* Analytics */}
+        <button
+          onClick={() => onNavigate?.('analytics')}
+          className="w-full bg-white border border-slate-200 rounded-lg p-4 text-right hover:bg-slate-50 transition flex items-center justify-between"
+        >
+          <span className="text-2xl">📊</span>
+          <div>
+            <div className="font-semibold text-slate-800">דוחות וניתוח</div>
+            <div className="text-sm text-slate-600">צפה בגרפים וסטטיסטיקות</div>
           </div>
         </button>
 

@@ -9,6 +9,9 @@ import CalendarScreen from '../components/screens/CalendarScreen'
 import AIScreen from '../components/screens/AIScreen'
 import KnowledgeBaseScreen from '../components/screens/KnowledgeBaseScreen'
 import MoreScreen from '../components/screens/MoreScreen'
+import SettingsScreen from '../components/screens/SettingsScreen'
+
+type MoreSubTab = 'main' | 'settings'
 
 interface HomeProps {
   userEmail: string
@@ -18,6 +21,15 @@ interface HomeProps {
 export default function Home({ userEmail, onLogout }: HomeProps) {
   const [activeTab, setActiveTab] = useState<TabType>('home')
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
+  const [moreSubTab, setMoreSubTab] = useState<MoreSubTab>('main')
+
+  const handleMoreNavigation = (subTab: string) => {
+    if (subTab === 'settings') {
+      setMoreSubTab('settings')
+    } else {
+      setActiveTab(subTab as TabType)
+    }
+  }
 
   const renderScreen = () => {
     // אם בחרנו לקוח, הצג את מסך הפרטים
@@ -42,9 +54,20 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
       case 'knowledge':
         return <KnowledgeBaseScreen userEmail={userEmail} />
       case 'more':
-        return <MoreScreen onLogout={onLogout} onNavigate={setActiveTab} />
+        if (moreSubTab === 'settings') {
+          return <SettingsScreen onBack={() => setMoreSubTab('main')} />
+        }
+        return <MoreScreen onLogout={onLogout} onNavigate={handleMoreNavigation} />
       default:
         return <HomeScreen userEmail={userEmail} />
+    }
+  }
+
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab)
+    // Reset more sub-tab when switching to more
+    if (tab === 'more') {
+      setMoreSubTab('main')
     }
   }
 
@@ -56,7 +79,7 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
       </div>
 
       {/* Bottom Navigation - לא מוצג כשמצפים מסך לקוח */}
-      {!selectedClientId && <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />}
+      {!selectedClientId && <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />}
     </div>
   )
 }

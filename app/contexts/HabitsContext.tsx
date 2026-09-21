@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { Habit, DailyHabits } from '../types'
+import { useAuth } from './AuthContext'
 
 interface HabitsContextType {
   habits: DailyHabits | null
@@ -15,12 +16,15 @@ interface HabitsContextType {
 const HabitsContext = createContext<HabitsContextType | undefined>(undefined)
 
 export function HabitsProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
   const [habits, setHabits] = useState<DailyHabits | null>(null)
 
-  // טעון נתונים מ-localStorage
   useEffect(() => {
+    if (!user) return
+
     const today = new Date().toISOString().split('T')[0]
-    const saved = localStorage.getItem(`habits-${today}`)
+    const storageKey = `habits-${user.id}-${today}`
+    const saved = localStorage.getItem(storageKey)
 
     if (saved) {
       setHabits(JSON.parse(saved))
@@ -75,21 +79,21 @@ export function HabitsProvider({ children }: { children: React.ReactNode }) {
         completionPercentage: 0
       })
     }
-  }, [])
+  }, [user])
 
-  // שמור ל-localStorage בכל שינוי
   useEffect(() => {
-    if (habits) {
+    if (habits && user) {
       const percentage = habits.habits.length > 0
         ? (habits.habits.filter(h => h.completed).length / habits.habits.length) * 100
         : 0
 
-      localStorage.setItem(`habits-${habits.date}`, JSON.stringify({
+      const storageKey = `habits-${user.id}-${habits.date}`
+      localStorage.setItem(storageKey, JSON.stringify({
         ...habits,
         completionPercentage: Math.round(percentage)
       }))
     }
-  }, [habits])
+  }, [habits, user])
 
   const addHabit = (habit: Habit) => {
     if (!habits) return

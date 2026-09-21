@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './styles/globals.css'
+import { AuthProvider } from './contexts/AuthContext'
 import { MealsProvider } from './contexts/MealsContext'
 import { HabitsProvider } from './contexts/HabitsContext'
 import { ProfileProvider } from './contexts/ProfileContext'
@@ -18,15 +19,17 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl">
       <body className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
-        <ProfileProvider>
-          <ConversationProvider>
-            <MealsProvider>
-              <HabitsProvider>
-                {children}
-              </HabitsProvider>
-            </MealsProvider>
-          </ConversationProvider>
-        </ProfileProvider>
+        <AuthProvider>
+          <ProfileProvider>
+            <ConversationProvider>
+              <MealsProvider>
+                <HabitsProvider>
+                  {children}
+                </HabitsProvider>
+              </MealsProvider>
+            </ConversationProvider>
+          </ProfileProvider>
+        </AuthProvider>
       </body>
     </html>
   )

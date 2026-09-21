@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { DailyMeals, Meal } from '../types'
+import { useAuth } from './AuthContext'
 
 interface MealsContextType {
   meals: DailyMeals | null
@@ -15,12 +16,15 @@ interface MealsContextType {
 const MealsContext = createContext<MealsContextType | undefined>(undefined)
 
 export function MealsProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
   const [meals, setMeals] = useState<DailyMeals | null>(null)
 
-  // טעון נתונים מ-localStorage
   useEffect(() => {
+    if (!user) return
+
     const today = new Date().toISOString().split('T')[0]
-    const saved = localStorage.getItem(`meals-${today}`)
+    const storageKey = `meals-${user.id}-${today}`
+    const saved = localStorage.getItem(storageKey)
 
     if (saved) {
       setMeals(JSON.parse(saved))
@@ -30,14 +34,14 @@ export function MealsProvider({ children }: { children: React.ReactNode }) {
         meals: []
       })
     }
-  }, [])
+  }, [user])
 
-  // שמור ל-localStorage בכל שינוי
   useEffect(() => {
-    if (meals) {
-      localStorage.setItem(`meals-${meals.date}`, JSON.stringify(meals))
+    if (meals && user) {
+      const storageKey = `meals-${user.id}-${meals.date}`
+      localStorage.setItem(storageKey, JSON.stringify(meals))
     }
-  }, [meals])
+  }, [meals, user])
 
   const addMeal = (meal: Meal) => {
     if (!meals) return

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { UserProfile } from '../types'
+import { useAuth } from './AuthContext'
 
 interface ProfileContextType {
   profile: UserProfile | null
@@ -12,11 +13,13 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined)
 
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
 
-  // טעון מ-localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('user-profile')
+    if (!user) return
+    const storageKey = `profile-${user.id}`
+    const saved = localStorage.getItem(storageKey)
     if (saved) {
       setProfile(JSON.parse(saved))
     } else {
@@ -36,16 +39,16 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         }
       }
       setProfile(defaultProfile)
-      localStorage.setItem('user-profile', JSON.stringify(defaultProfile))
+      localStorage.setItem(`profile-${user.id}`, JSON.stringify(defaultProfile))
     }
-  }, [])
+  }, [user])
 
-  // שמור בכל שינוי
   useEffect(() => {
-    if (profile) {
-      localStorage.setItem('user-profile', JSON.stringify(profile))
+    if (profile && user) {
+      const storageKey = `profile-${user.id}`
+      localStorage.setItem(storageKey, JSON.stringify(profile))
     }
-  }, [profile])
+  }, [profile, user])
 
   const updateProfile = (updates: Partial<UserProfile>) => {
     if (!profile) return

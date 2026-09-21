@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { Message } from '../types'
+import { useAuth } from './AuthContext'
 
 interface ConversationContextType {
   messages: Message[]
@@ -13,20 +14,24 @@ interface ConversationContextType {
 const ConversationContext = createContext<ConversationContextType | undefined>(undefined)
 
 export function ConversationProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
   const [messages, setMessages] = useState<Message[]>([])
 
-  // טעון מ-localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('conversation-messages')
+    if (!user) return
+    const storageKey = `conversation-${user.id}`
+    const saved = localStorage.getItem(storageKey)
     if (saved) {
       setMessages(JSON.parse(saved))
     }
-  }, [])
+  }, [user])
 
-  // שמור בכל שינוי
   useEffect(() => {
-    localStorage.setItem('conversation-messages', JSON.stringify(messages))
-  }, [messages])
+    if (user) {
+      const storageKey = `conversation-${user.id}`
+      localStorage.setItem(storageKey, JSON.stringify(messages))
+    }
+  }, [messages, user])
 
   const addMessage = (content: string, role: 'user' | 'assistant') => {
     const newMessage: Message = {

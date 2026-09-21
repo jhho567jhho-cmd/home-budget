@@ -2,9 +2,11 @@
 
 import { useState } from 'react'
 import { useProfile } from '../../contexts/ProfileContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 export default function ProfileScreen() {
   const { profile, setName, updateProfile } = useProfile()
+  const { user, logout } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     name: profile?.name || '',
@@ -129,6 +131,23 @@ export default function ProfileScreen() {
         <p className="text-sm">
           💡 <strong>טיפ:</strong> שימור פרטים אישיים עוזר לנו לתת לך הצעות מותאמות יותר!
         </p>
+      </div>
+
+      {/* מידע משתמש וכפתור התנתקות */}
+      <div className="card bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/30">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-sm text-slate-400">משתמש מחובר:</p>
+            <p className="text-lg font-bold">{user?.name}</p>
+            <p className="text-xs text-slate-500 mt-1">ID: {user?.id}</p>
+          </div>
+        </div>
+        <button
+          onClick={logout}
+          className="w-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-300 font-medium py-2 px-4 rounded-lg transition-all"
+        >
+          🚪 התנתקות
+        </button>
       </div>
     </div>
   )

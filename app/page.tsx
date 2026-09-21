@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuth } from './contexts/AuthContext'
 import BottomNav from './components/common/BottomNav'
 import HomeScreen from './components/screens/HomeScreen'
 import MealsScreen from './components/screens/MealsScreen'
@@ -8,10 +9,12 @@ import HabitsScreen from './components/screens/HabitsScreen'
 import StatsScreen from './components/screens/StatsScreen'
 import AIAssistantScreen from './components/screens/AIAssistantScreen'
 import ProfileScreen from './components/screens/ProfileScreen'
+import LoginScreen from './components/screens/LoginScreen'
 
 export type TabType = 'home' | 'meals' | 'habits' | 'stats' | 'ai' | 'profile'
 
 export default function Home() {
+  const { isAuthenticated } = useAuth()
   const [activeTab, setActiveTab] = useState<TabType>('home')
 
   const renderScreen = () => {
@@ -31,6 +34,10 @@ export default function Home() {
       default:
         return <HomeScreen />
     }
+  }
+
+  if (!isAuthenticated) {
+    return <LoginScreen />
   }
 
   return (

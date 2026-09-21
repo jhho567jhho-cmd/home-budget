@@ -1,34 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useConversation } from '../../contexts/ConversationContext'
 import { useProfile } from '../../contexts/ProfileContext'
+import { useHabits } from '../../contexts/HabitsContext'
+import { useMeals } from '../../contexts/MealsContext'
+import { sendMessageToAI, hasAPIKey, getFallbackResponse } from '../../services/aiService'
 
 export default function AIAssistantScreen() {
   const { messages, addMessage } = useConversation()
   const { profile } = useProfile()
+  const { habits } = useHabits()
+  const { meals } = useMeals()
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [hasAPI, setHasAPI] = useState(false)
 
-  // תשובות מדומות מ-AI
-  const getAIResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase()
-
-    if (lowerMessage.includes('ארוחה') || lowerMessage.includes('אכול')) {
-      return '🍽️ הצעה: אתה יכול לאכול סלט טונה עם לחם מלא - זה בריא ויותיר אותך שבע! 💪'
-    }
-    if (lowerMessage.includes('מה') && lowerMessage.includes('השבוע')) {
-      return '📊 השבוע שלך נראה טוב! הושלמת 5 מתוך 7 ימים את כל ההרגלים. המשך כך! 🌟'
-    }
-    if (lowerMessage.includes('סטריק') || lowerMessage.includes('הרגל')) {
-      return '🔥 הסטריק המקסימלי שלך הוא 5 ימים! כדי להגביר אותו, נסה להשלים את ההרגלים בשעה זהה כל יום.'
-    }
-    if (lowerMessage.includes('טיפ')) {
-      return '💡 טיפ היום: שתיית מים בבוקר עוזרת להפעיל את הגוף שלך! נסה לשתות כוס מים חמה עם לימון בעוד כמה דקות. 💧'
-    }
-
-    return `שלום ${profile?.name}! 👋 אני כאן בעזרה. תן לי לשאול - מה בעצם אתה רוצה עכשיו? 🤔`
-  }
+  useEffect(() => {
+    setHasAPI(hasAPIKey())
+  }, [])
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,20 +26,69 @@ export default function AIAssistantScreen() {
 
     // הוסף הודעה של המשתמש
     addMessage(input, 'user')
+    const userMessage = input
     setInput('')
     setIsLoading(true)
 
-    // סימולציה של טעינה
-    setTimeout(() => {
-      const response = getAIResponse(input)
+    try {
+      // בנה context לAI
+      const context = {
+        userName: profile?.name || 'משתמש',
+        currentHabits: habits?.habits.map(h => ({
+          name: h.name,
+          completed: h.completed,
+          streak: h.streak
+        })),
+        upcomingMeals: meals?.meals.map(m => ({
+          name: m.name,
+          time: m.time
+        })),
+        todayStats: {
+          completionPercentage: habits?.habits.length
+            ? Math.round((habits.habits.filter(h => h.completed).length / habits.habits.length) * 100)
+            : 0,
+          mealsLogged: meals?.meals.length || 0,
+          habitsCompleted: habits?.habits.filter(h => h.completed).length || 0
+        }
+      }
+
+      // המר messages לformat שAI יכול להשתמש בו
+      const conversationHistory = messages.map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }))
+
+      let response: string
+
+      if (hasAPI) {
+        // שתמש בClaude API אמיתי
+        response = await sendMessageToAI(userMessage, context, conversationHistory)
+      } else {
+        // שתמש בתשובה fallback
+        response = getFallbackResponse(userMessage)
+      }
+
       addMessage(response, 'assistant')
+    } catch (error) {
+      console.error('שגיאה:', error)
+      addMessage('סליחה, קרתה שגיאה. אנא נסה שוב.', 'assistant')
+    } finally {
       setIsLoading(false)
-    }, 800)
+    }
   }
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-6 flex flex-col h-screen animate-fadeIn">
       <h1 className="text-3xl font-bold mb-6">🤖 העוזר שלך</h1>
+
+      {/* אזהרה אם אין API key */}
+      {!hasAPI && (
+        <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-3 mb-4">
+          <p className="text-sm text-yellow-300">
+            ⚠️ <strong>הערה:</strong> עוזר AI בפחות יכול כי אין ANTHROPIC_API_KEY. הוסף אותו ל-.env.local כדי להשתמש בAI מלא.
+          </p>
+        </div>
+      )}
 
       {/* אזור ההודעות */}
       <div className="flex-1 overflow-y-auto mb-6 space-y-4">

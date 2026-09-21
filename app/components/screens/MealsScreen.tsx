@@ -2,11 +2,15 @@
 
 import { useState } from 'react'
 import { useMeals } from '../../contexts/MealsContext'
+import { useProfile } from '../../contexts/ProfileContext'
 import { Meal } from '../../types'
+import { exportToJSON, exportToCSV, exportToReport } from '../../services/exportService'
 
 export default function MealsScreen() {
   const { meals, addMeal } = useMeals()
+  const { profile } = useProfile()
   const [showForm, setShowForm] = useState(false)
+  const [showExport, setShowExport] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     time: '12:00',
@@ -51,13 +55,54 @@ export default function MealsScreen() {
     <div className="w-full max-w-2xl mx-auto px-4 py-6 animate-fadeIn">
       <h1 className="text-3xl font-bold mb-6">🍽️ תכנון ארוחות</h1>
 
-      {/* כפתור הוסף */}
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className="btn-primary w-full mb-6"
-      >
-        {showForm ? '❌ ביטול' : '➕ הוסף ארוחה'}
-      </button>
+      {/* כפתורים */}
+      <div className="flex gap-2 mb-6">
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="btn-primary flex-1"
+        >
+          {showForm ? '❌ ביטול' : '➕ הוסף ארוחה'}
+        </button>
+        <button
+          onClick={() => setShowExport(!showExport)}
+          className="btn-secondary flex-1"
+        >
+          📤 ייצוא
+        </button>
+      </div>
+
+      {/* תפריט ייצוא */}
+      {showExport && (
+        <div className="card mb-6 space-y-2">
+          <button
+            onClick={() => {
+              exportToJSON(meals?.meals)
+              setShowExport(false)
+            }}
+            className="w-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 p-2 rounded-lg transition-all text-sm"
+          >
+            📋 ייצוא כ-JSON
+          </button>
+          <button
+            onClick={() => {
+              exportToCSV(meals?.meals)
+              setShowExport(false)
+            }}
+            className="w-full bg-green-500/20 hover:bg-green-500/30 text-green-300 p-2 rounded-lg transition-all text-sm"
+          >
+            📊 ייצוא כ-CSV (אקסל)
+          </button>
+          <button
+            onClick={() => {
+              exportToReport(meals?.meals, profile?.name)
+              setShowExport(false)
+            }}
+            className="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 p-2 rounded-lg transition-all text-sm"
+          >
+            📄 ייצוא דוח טקסט
+          </button>
+        </div>
+      )}
 
       {/* טופס הוסף */}
       {showForm && (

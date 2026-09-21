@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { Message } from '../types'
 import { useAuth } from './AuthContext'
+import { getMessages as getSupabaseMessages, addMessage as addSupabaseMessage } from '../lib/supabase'
 
 interface ConversationContextType {
   messages: Message[]
@@ -14,33 +15,73 @@ interface ConversationContextType {
 const ConversationContext = createContext<ConversationContextType | undefined>(undefined)
 
 export function ConversationProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth()
+  const { user, useSupabase } = useAuth()
   const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) return
-    const storageKey = `conversation-${user.id}`
-    const saved = localStorage.getItem(storageKey)
-    if (saved) {
-      setMessages(JSON.parse(saved))
+    const loadMessages = async () => {
+      if (!user) {
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        if (useSupabase) {
+          const supabaseMessages = await getSupabaseMessages(user.id)
+          setMessages(supabaseMessages.map(m => ({
+            id: m.id,
+            role: m.role,
+            content: m.content,
+            timestamp: new Date(m.created_at)
+          })))
+        } else {
+          const storageKey = `conversation-${user.id}`
+          const saved = localStorage.getItem(storageKey)
+          if (saved) {
+            setMessages(JSON.parse(saved))
+          }
+        }
+      } catch (e) {
+        console.error('Error loading messages:', e)
+      }
+
+      setIsLoading(false)
     }
-  }, [user])
+
+    loadMessages()
+  }, [user, useSupabase])
 
   useEffect(() => {
-    if (user) {
+    if (user && !useSupabase) {
       const storageKey = `conversation-${user.id}`
       localStorage.setItem(storageKey, JSON.stringify(messages))
     }
-  }, [messages, user])
+  }, [messages, user, useSupabase])
 
-  const addMessage = (content: string, role: 'user' | 'assistant') => {
+  const addMessage = async (content: string, role: 'user' | 'assistant') => {
+    if (!user) return
+
     const newMessage: Message = {
       id: Date.now().toString(),
       role,
       content,
       timestamp: new Date()
     }
-    setMessages([...messages, newMessage])
+
+    try {
+      if (useSupabase) {
+        const savedMessage = await addSupabaseMessage(user.id, role, content)
+        if (savedMessage) {
+          newMessage.id = savedMessage.id
+          newMessage.timestamp = new Date(savedMessage.created_at)
+        }
+      }
+      setMessages([...messages, newMessage])
+    } catch (e) {
+      console.error('Error adding message:', e)
+      setMessages([...messages, newMessage])
+    }
   }
 
   const clearMessages = () => {

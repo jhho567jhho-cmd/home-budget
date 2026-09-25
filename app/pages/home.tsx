@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import BottomNav, { type TabType } from '../components/BottomNav'
 import HomeScreen from '../components/screens/HomeScreen'
-import ClientsScreen from '../components/screens/ClientsScreen'
-import ClientDetailScreen from '../components/screens/ClientDetailScreen'
 import CalendarScreen from '../components/screens/CalendarScreen'
 import AIScreen from '../components/screens/AIScreen'
 import KnowledgeBaseScreen from '../components/screens/KnowledgeBaseScreen'
@@ -21,7 +19,6 @@ interface HomeProps {
 
 export default function Home({ userEmail, onLogout }: HomeProps) {
   const [activeTab, setActiveTab] = useState<TabType>('home')
-  const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
   const [moreSubTab, setMoreSubTab] = useState<MoreSubTab>('main')
 
   const handleMoreNavigation = (subTab: string) => {
@@ -40,21 +37,9 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
   }
 
   const renderScreen = () => {
-    // אם בחרנו לקוח, הצג את מסך הפרטים
-    if (selectedClientId) {
-      return (
-        <ClientDetailScreen
-          clientId={selectedClientId}
-          onBack={() => setSelectedClientId(null)}
-        />
-      )
-    }
-
     switch (activeTab) {
       case 'home':
         return <HomeScreen userEmail={userEmail} />
-      case 'clients':
-        return <ClientsScreen onSelectClient={setSelectedClientId} />
       case 'calendar':
         return <CalendarScreen />
       case 'ai':
@@ -81,8 +66,8 @@ export default function Home({ userEmail, onLogout }: HomeProps) {
         {renderScreen()}
       </div>
 
-      {/* Bottom Navigation - לא מוצג כשמצפים מסך לקוח */}
-      {!selectedClientId && <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />}
+      {/* Bottom Navigation */}
+      <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
   )
 }

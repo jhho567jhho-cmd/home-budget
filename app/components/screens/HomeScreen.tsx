@@ -166,6 +166,11 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
         <DailyJournal />
       </div>
 
+      {/* Add Health Entry Button */}
+      <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition mb-3">
+        ➕ הוסף רישום בריאות
+      </button>
+
       {/* AI Assistant Button */}
       <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition">
         🤖 שחח עם העוזרת שלי

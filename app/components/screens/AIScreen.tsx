@@ -2,40 +2,38 @@
 
 import { useEffect, useRef } from 'react'
 import { useConversation } from '@/app/context/ConversationContext'
-import { useClients } from '@/app/context/ClientsContext'
-import { useMeetings } from '@/app/context/MeetingsContext'
+import { useHealth } from '@/app/context/ExpensesContext'
 import { useTasks } from '@/app/context/TasksContext'
 import { aiService } from '@/app/services/aiService'
 
 const QUICK_ACTIONS = [
-  { id: 'today', label: '📋 מה יש לי היום?', message: 'מה יש לי היום?' },
+  { id: 'today', label: '📊 סיכום בריאות היום', message: 'סכם לי את רישומי הבריאות של היום' },
   {
-    id: 'followup',
-    label: '⚠️ לקוחות דורשים מעקב',
-    message: 'אילו לקוחות דורשים מעקב?',
+    id: 'goals',
+    label: '🎯 יעדים שלי',
+    message: 'מה היעדים הבריאותיים שלי?',
   },
   {
-    id: 'summary',
-    label: '📊 סכם לי את הפגישות',
-    message: 'סכם לי את הפגישות של היום',
+    id: 'activity',
+    label: '💪 פעילות גופנית',
+    message: 'כמה פעילות גופנית עשיתי השבוע?',
   },
   {
-    id: 'tasks',
-    label: '✓ משימות פתוחות',
-    message: 'הצג משימות פתוחות',
+    id: 'nutrition',
+    label: '🥗 תזונה',
+    message: 'מה אכלתי היום ודיברנו על הבחירות שלי?',
   },
   {
-    id: 'new-clients',
-    label: '👤 לקוחות חדשים',
-    message: 'הצג לקוחות ללא מעקב',
+    id: 'sleep',
+    label: '😴 איכות שינה',
+    message: 'כיצד אני יכול לשפר את איכות השינה שלי?',
   },
 ]
 
 export default function AIScreen() {
   const { messages, addMessage, isLoading, setIsLoading, clearMessages } =
     useConversation()
-  const { clients } = useClients()
-  const { meetings } = useMeetings()
+  const { entries } = useHealth()
   const { tasks } = useTasks()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -61,10 +59,9 @@ export default function AIScreen() {
     setIsLoading(true)
 
     try {
-      // שלח ל-AI service (כרגע mock)
+      // שלח ל-AI service
       const aiResponse = await aiService.sendMessage(userMessage, {
-        clients,
-        meetings,
+        entries,
         tasks,
       })
 
@@ -89,8 +86,7 @@ export default function AIScreen() {
     try {
       // שלח ל-AI service
       const aiResponse = await aiService.sendMessage(message, {
-        clients,
-        meetings,
+        entries,
         tasks,
       })
 

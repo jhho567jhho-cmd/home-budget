@@ -3,7 +3,6 @@
 import { useState, useMemo } from 'react'
 import { useMeetings } from '@/app/context/MeetingsContext'
 import { useTasks } from '@/app/context/TasksContext'
-import { useClients } from '@/app/context/ClientsContext'
 import { formatDate } from '@/app/utils/dateUtils'
 import AddMeetingModal from '../modals/AddMeetingModal'
 import MeetingDetailsModal from '../modals/MeetingDetailsModal'
@@ -15,15 +14,12 @@ interface DayEvent {
   type: 'meeting' | 'task'
   title: string
   time?: string
-  clientId?: string
-  clientName?: string
   data: any
 }
 
 export default function CalendarScreen() {
   const { meetings } = useMeetings()
   const { tasks } = useTasks()
-  const { getClient } = useClients()
 
   const [viewMode, setViewMode] = useState<ViewMode>('day')
   const [selectedDate, setSelectedDate] = useState(new Date())
@@ -52,14 +48,11 @@ export default function CalendarScreen() {
     meetings
       .filter((m) => m.date === dateStr)
       .forEach((m) => {
-        const client = getClient(m.clientId)
         events.push({
           id: m.id,
           type: 'meeting',
           title: m.summary.mainTopic,
           time: m.time,
-          clientId: m.clientId,
-          clientName: client?.name,
           data: m,
         })
       })
@@ -68,14 +61,11 @@ export default function CalendarScreen() {
     tasks
       .filter((t) => t.dueDate === dateStr)
       .forEach((t) => {
-        const client = t.clientId ? getClient(t.clientId) : null
         events.push({
           id: t.id,
           type: 'task',
           title: t.title,
           time: t.dueTime,
-          clientId: t.clientId,
-          clientName: client?.name,
           data: t,
         })
       })
@@ -223,9 +213,9 @@ export default function CalendarScreen() {
                           {event.time && <span className="text-sm text-slate-600">{event.time} • </span>}
                           {event.title}
                         </div>
-                        {event.clientName && (
-                          <div className="text-sm text-slate-600 mt-1">👤 {event.clientName}</div>
-                        )}
+                        <div className="text-xs text-slate-500 mt-1">
+                          {event.type === 'task' ? '✓ משימה' : '📅 פגישה'}
+                        </div>
                         {event.type === 'task' && event.data.priority && (
                           <div className="text-xs mt-2">
                             {event.data.priority === 'high'

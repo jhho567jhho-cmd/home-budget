@@ -1,4 +1,5 @@
 import { Client, Meeting, Task } from '@/app/types'
+import { HealthEntry } from '@/app/context/ExpensesContext'
 
 export interface AIMessage {
   role: 'user' | 'assistant'
@@ -10,6 +11,7 @@ interface AIContext {
   clients?: Client[]
   meetings?: Meeting[]
   tasks?: Task[]
+  entries?: HealthEntry[]
   userEmail?: string
 }
 
@@ -50,12 +52,13 @@ export const aiService = {
    */
   isQuickAction(message: string): boolean {
     const quickActions = [
-      'יש לי היום',
-      'מה היום',
-      'לקוחות דורשים',
-      'סכם',
+      'בריאות',
+      'יעדים',
+      'פעילות',
+      'תזונה',
+      'שינה',
+      'סכום',
       'משימות',
-      'לקוחות ללא',
     ]
     return quickActions.some((action) =>
       message.toLowerCase().includes(action)

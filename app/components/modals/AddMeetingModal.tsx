@@ -5,11 +5,11 @@ import { useMeetings } from '@/app/context/MeetingsContext'
 import { MeetingType } from '@/app/types'
 
 interface AddMeetingModalProps {
-  clientId: string
+  clientId?: string
   onClose: () => void
 }
 
-export default function AddMeetingModal({ clientId, onClose }: AddMeetingModalProps) {
+export default function AddMeetingModal({ clientId = '', onClose }: AddMeetingModalProps) {
   const { addMeeting } = useMeetings()
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],

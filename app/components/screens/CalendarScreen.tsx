@@ -112,7 +112,7 @@ export default function CalendarScreen() {
     <div className="pb-6 max-w-2xl mx-auto">
       {/* Header */}
       <div className="sticky top-0 bg-white border-b border-slate-200 px-4 py-4 z-10">
-        <h1 className="text-3xl font-bold text-slate-800 mb-4">📅 היומן שלי</h1>
+        <h1 className="text-3xl font-bold text-slate-800 mb-4">📅 יומן בריאות</h1>
 
         {/* View toggle */}
         <div className="flex gap-2 mb-4">
@@ -177,12 +177,12 @@ export default function CalendarScreen() {
               </h2>
             </div>
 
-            {/* Add meeting button */}
+            {/* Add health challenge button */}
             <button
               onClick={() => setShowAddMeeting(true)}
-              className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-semibold mb-6"
+              className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition font-semibold mb-6"
             >
-              + פגישה חדשה
+              ➕ אתגר בריאותי חדש
             </button>
 
             {/* Events */}
@@ -245,12 +245,12 @@ export default function CalendarScreen() {
               </h2>
             </div>
 
-            {/* Add meeting button */}
+            {/* Add health challenge button */}
             <button
               onClick={() => setShowAddMeeting(true)}
-              className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-semibold mb-6"
+              className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition font-semibold mb-6"
             >
-              + פגישה חדשה
+              ➕ אתגר בריאותי חדש
             </button>
 
             {/* Days grid */}

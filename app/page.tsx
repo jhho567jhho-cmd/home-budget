@@ -9,7 +9,7 @@ import { TasksProvider } from './context/TasksContext'
 import { NotesProvider } from './context/NotesContext'
 import { ConversationProvider } from './context/ConversationContext'
 import { KnowledgeProvider } from './context/KnowledgeContext'
-import { ExpensesProvider } from './context/ExpensesContext'
+import { HealthProvider } from './context/ExpensesContext'
 import { JournalProvider } from './context/JournalContext'
 
 export default function Page() {
@@ -52,7 +52,7 @@ export default function Page() {
 
   return isLoggedIn ? (
     <JournalProvider>
-      <ExpensesProvider>
+      <HealthProvider>
         <ClientsProvider>
           <MeetingsProvider>
             <TasksProvider>
@@ -66,7 +66,7 @@ export default function Page() {
             </TasksProvider>
           </MeetingsProvider>
         </ClientsProvider>
-      </ExpensesProvider>
+      </HealthProvider>
     </JournalProvider>
   ) : (
     <Login onLogin={handleLogin} />

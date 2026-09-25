@@ -2,125 +2,107 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
-export interface Expense {
+export interface HealthEntry {
   id: number
-  description: string
-  amount: number
-  category: string
+  note: string
+  value: number
+  type: string
+  unit: string
   date: string
-  clientId?: string
-  clientName?: string
 }
 
-interface ExpensesContextType {
-  expenses: Expense[]
-  addExpense: (expense: Omit<Expense, 'id'>) => void
-  deleteExpense: (id: number) => void
-  updateExpense: (id: number, expense: Partial<Expense>) => void
-  getMonthlyExpenses: (month: number, year: number) => Expense[]
-  getTotalMonthlySpending: (month: number, year: number) => number
-  getCategoryBreakdown: (month: number, year: number) => Record<string, number>
-  getClientExpenses: (clientId: string) => Expense[]
-  getClientTotalSpending: (clientId: string) => number
-  getClientsBreakdown: () => Record<string, number>
+interface HealthContextType {
+  entries: HealthEntry[]
+  addEntry: (entry: Omit<HealthEntry, 'id'>) => void
+  deleteEntry: (id: number) => void
+  updateEntry: (id: number, entry: Partial<HealthEntry>) => void
+  getMonthlyEntries: (month: number, year: number) => HealthEntry[]
+  getEntresByType: (type: string) => HealthEntry[]
+  getTypeBreakdown: (month: number, year: number) => Record<string, number>
 }
 
-const ExpensesContext = createContext<ExpensesContextType | undefined>(undefined)
+const HealthContext = createContext<HealthContextType | undefined>(undefined)
 
-export function ExpensesProvider({ children }: { children: ReactNode }) {
-  const [expenses, setExpenses] = useState<Expense[]>([
-    { id: 1, description: 'קניות במכולת', amount: 150, category: 'קניות', date: '2026-09-17' },
-    { id: 2, description: 'חשמל', amount: 200, category: 'שירותים', date: '2026-09-15' },
+export function HealthProvider({ children }: { children: ReactNode }) {
+  const [entries, setEntries] = useState<HealthEntry[]>([
+    { id: 1, note: 'בוקר - יוגה', value: 30, type: 'פעילות', unit: 'דקות', date: '2026-09-21' },
+    { id: 2, note: 'ארוחת בוקר - ביצים וגרנולה', value: 350, type: 'תזונה', unit: 'קלוריות', date: '2026-09-21' },
   ])
 
   useEffect(() => {
-    const saved = localStorage.getItem('expenses')
+    const saved = localStorage.getItem('healthEntries')
     if (saved) {
-      setExpenses(JSON.parse(saved))
+      setEntries(JSON.parse(saved))
     }
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses))
-  }, [expenses])
+    localStorage.setItem('healthEntries', JSON.stringify(entries))
+  }, [entries])
 
-  const addExpense = (expense: Omit<Expense, 'id'>) => {
-    const newExpense: Expense = {
-      ...expense,
-      id: Math.max(...expenses.map((e) => e.id), 0) + 1,
+  const addEntry = (entry: Omit<HealthEntry, 'id'>) => {
+    const newEntry: HealthEntry = {
+      ...entry,
+      id: Math.max(...entries.map((e) => e.id), 0) + 1,
     }
-    setExpenses([...expenses, newExpense])
+    setEntries([...entries, newEntry])
   }
 
-  const deleteExpense = (id: number) => {
-    setExpenses(expenses.filter((e) => e.id !== id))
+  const deleteEntry = (id: number) => {
+    setEntries(entries.filter((e) => e.id !== id))
   }
 
-  const updateExpense = (id: number, updates: Partial<Expense>) => {
-    setExpenses(expenses.map((e) => (e.id === id ? { ...e, ...updates } : e)))
+  const updateEntry = (id: number, updates: Partial<HealthEntry>) => {
+    setEntries(entries.map((e) => (e.id === id ? { ...e, ...updates } : e)))
   }
 
-  const getMonthlyExpenses = (month: number, year: number) => {
-    return expenses.filter((e) => {
-      const expDate = new Date(e.date)
-      return expDate.getMonth() === month && expDate.getFullYear() === year
+  const getMonthlyEntries = (month: number, year: number) => {
+    return entries.filter((e) => {
+      const entryDate = new Date(e.date)
+      return entryDate.getMonth() === month && entryDate.getFullYear() === year
     })
   }
 
-  const getTotalMonthlySpending = (month: number, year: number) => {
-    return getMonthlyExpenses(month, year).reduce((sum, e) => sum + e.amount, 0)
+  const getEntresByType = (type: string) => {
+    return entries.filter((e) => e.type === type)
   }
 
-  const getCategoryBreakdown = (month: number, year: number) => {
+  const getTypeBreakdown = (month: number, year: number) => {
     const breakdown: Record<string, number> = {}
-    getMonthlyExpenses(month, year).forEach((e) => {
-      breakdown[e.category] = (breakdown[e.category] || 0) + e.amount
-    })
-    return breakdown
-  }
-
-  const getClientExpenses = (clientId: string) => {
-    return expenses.filter((e) => e.clientId === clientId)
-  }
-
-  const getClientTotalSpending = (clientId: string) => {
-    return getClientExpenses(clientId).reduce((sum, e) => sum + e.amount, 0)
-  }
-
-  const getClientsBreakdown = () => {
-    const breakdown: Record<string, number> = {}
-    expenses.forEach((e) => {
-      if (e.clientName) {
-        breakdown[e.clientName] = (breakdown[e.clientName] || 0) + e.amount
-      }
+    getMonthlyEntries(month, year).forEach((e) => {
+      breakdown[e.type] = (breakdown[e.type] || 0) + e.value
     })
     return breakdown
   }
 
   return (
-    <ExpensesContext.Provider
+    <HealthContext.Provider
       value={{
-        expenses,
-        addExpense,
-        deleteExpense,
-        updateExpense,
-        getMonthlyExpenses,
-        getTotalMonthlySpending,
-        getCategoryBreakdown,
-        getClientExpenses,
-        getClientTotalSpending,
-        getClientsBreakdown,
+        entries,
+        addEntry,
+        deleteEntry,
+        updateEntry,
+        getMonthlyEntries,
+        getEntresByType,
+        getTypeBreakdown,
       }}
     >
       {children}
-    </ExpensesContext.Provider>
+    </HealthContext.Provider>
   )
 }
 
-export function useExpenses() {
-  const context = useContext(ExpensesContext)
+export function useHealth() {
+  const context = useContext(HealthContext)
   if (!context) {
-    throw new Error('useExpenses must be used within ExpensesProvider')
+    throw new Error('useHealth must be used within HealthProvider')
   }
   return context
 }
+
+// Keep backwards compatibility
+export function useExpenses() {
+  return useHealth()
+}
+
+export const ExpensesProvider = HealthProvider

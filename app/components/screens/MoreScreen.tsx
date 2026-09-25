@@ -37,15 +37,15 @@ export default function MoreScreen({ onLogout, onNavigate }: MoreScreenProps) {
           </div>
         </button>
 
-        {/* Analytics */}
+        {/* Health Analytics */}
         <button
           onClick={() => onNavigate?.('analytics')}
           className="w-full bg-white border border-slate-200 rounded-lg p-4 text-right hover:bg-slate-50 transition flex items-center justify-between"
         >
-          <span className="text-2xl">📊</span>
+          <span className="text-2xl">💪</span>
           <div>
-            <div className="font-semibold text-slate-800">דוחות וניתוח</div>
-            <div className="text-sm text-slate-600">צפה בגרפים וסטטיסטיקות</div>
+            <div className="font-semibold text-slate-800">דוחות בריאות</div>
+            <div className="text-sm text-slate-600">צפה בנתונים וגרפים בריאותיים</div>
           </div>
         </button>
 

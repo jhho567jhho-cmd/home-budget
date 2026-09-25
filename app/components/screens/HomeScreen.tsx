@@ -4,9 +4,7 @@ import { useState, useMemo } from 'react'
 import { getCurrentDate, getGreeting } from '@/app/utils/dateUtils'
 import { useMeetings } from '@/app/context/MeetingsContext'
 import { useTasks } from '@/app/context/TasksContext'
-import { useClients } from '@/app/context/ClientsContext'
-import { useExpenses } from '@/app/context/ExpensesContext'
-import SpendingAnalytics from '@/app/components/SpendingAnalytics'
+import { useHealth } from '@/app/context/ExpensesContext'
 import DailyJournal from '@/app/components/DailyJournal'
 
 interface HomeScreenProps {
@@ -20,8 +18,7 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
 
   const { meetings, getUpcomingMeetings } = useMeetings()
   const { tasks } = useTasks()
-  const { clients, getClientsByStatus } = useClients()
-  const { expenses, addExpense, deleteExpense } = useExpenses()
+  const { entries, addEntry, deleteEntry } = useHealth()
 
   // קבל את האירועים של היום
   const today = new Date().toISOString().split('T')[0]
@@ -34,8 +31,11 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
   // קבל את הפגישה הבאה
   const nextMeeting = useMemo(() => getUpcomingMeetings()[0], [getUpcomingMeetings])
 
-  // לקוחות דורשים מעקב
-  const followupClients = useMemo(() => getClientsByStatus('followup'), [getClientsByStatus])
+  // רישומי בריאות של היום
+  const todaysHealthEntries = useMemo(
+    () => entries.filter((e) => e.date === today),
+    [entries]
+  )
 
   return (
     <div className="px-4 pt-6 pb-6 max-w-2xl mx-auto">
@@ -50,27 +50,36 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-4 text-center shadow-lg text-white">
-          <div className="text-3xl font-bold mb-1">{todaysMeetings.length}</div>
-          <div className="text-sm opacity-90">פגישות היום</div>
+          <div className="text-3xl font-bold mb-1">{todaysHealthEntries.length}</div>
+          <div className="text-sm opacity-90">רישומים בריאותיים</div>
         </div>
         <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-4 text-center shadow-lg text-white">
           <div className="text-3xl font-bold mb-1">
-            {todaysTasks.filter((t) => t.status !== 'completed').length}
+            {new Set(todaysHealthEntries.map((e) => e.type)).size}
           </div>
-          <div className="text-sm opacity-90">משימות להיום</div>
+          <div className="text-sm opacity-90">סוגים שונים</div>
         </div>
       </div>
 
-      {/* Spending Analytics */}
-      <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-6">💰 ניתוח הוצאות</h2>
-        <SpendingAnalytics
-          expenses={expenses}
-          monthlyBudget={10000}
-          onAddExpense={addExpense}
-          onDeleteExpense={deleteExpense}
-        />
-      </div>
+      {/* Today's Health Summary */}
+      {todaysHealthEntries.length > 0 && (
+        <div className="bg-slate-800 rounded-2xl shadow-lg p-6 mb-8">
+          <h2 className="text-lg font-semibold text-white mb-4">📊 רישומי בריאות היום</h2>
+          <div className="space-y-3">
+            {todaysHealthEntries.map((entry) => (
+              <div key={entry.id} className="border-r-4 border-green-400 pl-4 py-2">
+                <div className="font-semibold text-white">{entry.type}</div>
+                <div className="text-sm text-gray-400 mt-1">
+                  {entry.note}
+                </div>
+                <div className="text-sm font-medium text-green-400 mt-1">
+                  {entry.value} {entry.unit}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Today's Meetings */}
       {todaysMeetings.length > 0 && (
@@ -151,19 +160,6 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
         </div>
       )}
 
-      {/* Clients needing follow-up */}
-      {followupClients.length > 0 && (
-        <div className="bg-slate-800 rounded-2xl p-4 shadow-lg mb-6">
-          <h3 className="font-semibold text-white mb-2">⚠️ לקוחות דורשים מעקב ({followupClients.length})</h3>
-          <div className="space-y-1">
-            {followupClients.slice(0, 3).map((client) => (
-              <div key={client.id} className="text-sm text-gray-300">
-                • {client.name}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Daily Journal */}
       <div className="mb-6">

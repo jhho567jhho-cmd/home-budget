@@ -6,6 +6,7 @@ import { useMeetings } from '@/app/context/MeetingsContext'
 import { useTasks } from '@/app/context/TasksContext'
 import { useHealth } from '@/app/context/ExpensesContext'
 import DailyJournal from '@/app/components/DailyJournal'
+import AddHealthEntryModal from '@/app/components/modals/AddHealthEntryModal'
 
 interface HomeScreenProps {
   userEmail: string
@@ -13,6 +14,7 @@ interface HomeScreenProps {
 
 export default function HomeScreen({ userEmail }: HomeScreenProps) {
   const [userName] = useState('דבורה')
+  const [showAddEntry, setShowAddEntry] = useState(false)
   const currentDate = getCurrentDate()
   const greeting = getGreeting()
 
@@ -167,7 +169,10 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
       </div>
 
       {/* Add Health Entry Button */}
-      <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition mb-3">
+      <button
+        onClick={() => setShowAddEntry(true)}
+        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition mb-3"
+      >
         ➕ הוסף רישום בריאות
       </button>
 
@@ -175,6 +180,11 @@ export default function HomeScreen({ userEmail }: HomeScreenProps) {
       <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg p-4 font-semibold hover:shadow-lg transition">
         🤖 שחח עם העוזרת שלי
       </button>
+
+      {/* Modals */}
+      {showAddEntry && (
+        <AddHealthEntryModal onClose={() => setShowAddEntry(false)} />
+      )}
     </div>
   )
 }

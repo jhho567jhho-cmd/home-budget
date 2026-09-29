@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  
+  basePath: '/home-budget',
+  images: { unoptimized: true },
   reactStrictMode: true,
   swcMinify: true,
   compress: true,
